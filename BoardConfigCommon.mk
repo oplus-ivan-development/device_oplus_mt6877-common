@@ -37,5 +37,10 @@ TARGET_NO_BOOTLOADER := true
 # Display
 TARGET_SCREEN_DENSITY := 480
 
+# Touch
+SOONG_CONFIG_NAMESPACES += OPLUS_LINEAGE_TOUCH_HAL
+SOONG_CONFIG_OPLUS_LINEAGE_TOUCH_HAL := INCLUDE_DIR
+SOONG_CONFIG_OPLUS_LINEAGE_TOUCH_HAL_INCLUDE_DIR := $(DEVICE_PATH)/touch/include
+
 # inherit from the proprietary version
 include vendor/oplus/mt6877-common/BoardConfigVendor.mk
