@@ -34,5 +34,8 @@ TARGET_BOARD_PLATFORM := mt6877
 TARGET_BOOTLOADER_BOARD_NAME := oplus6877
 TARGET_NO_BOOTLOADER := true
 
+# Display
+TARGET_SCREEN_DENSITY := 480
+
 # inherit from the proprietary version
 include vendor/oplus/mt6877-common/BoardConfigVendor.mk
