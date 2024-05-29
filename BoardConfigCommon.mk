@@ -29,5 +29,10 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a76
 
+# Bootloader
+TARGET_BOARD_PLATFORM := mt6877
+TARGET_BOOTLOADER_BOARD_NAME := oplus6877
+TARGET_NO_BOOTLOADER := true
+
 # inherit from the proprietary version
 include vendor/oplus/mt6877-common/BoardConfigVendor.mk
