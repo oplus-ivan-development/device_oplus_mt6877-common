@@ -122,6 +122,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     OplusDoze
 
+# Gatekeeper
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0-service \
+    android.hardware.gatekeeper@1.0-impl
+
 # IMS
 PRODUCT_BOOT_JARS += \
     mediatek-common \
