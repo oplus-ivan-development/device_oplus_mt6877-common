@@ -122,6 +122,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     OplusDoze
 
+# Device-specific background service
+PRODUCT_PACKAGES += \
+    OssiDeviceService
+
 # Gatekeeper
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-service \
