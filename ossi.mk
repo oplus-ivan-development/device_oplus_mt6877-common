@@ -98,6 +98,19 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.3.vendor \
     android.hardware.drm@1.4.vendor
 
+# Display
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0.vendor \
+    android.hardware.graphics.allocator@3.0.vendor \
+    android.hardware.graphics.allocator@4.0.vendor \
+    android.hidl.allocator@1.0.vendor \
+    android.hardware.graphics.common-V2-ndk_platform.vendor \
+    android.hardware.graphics.composer@2.1-service \
+    android.hardware.memtrack@1.0-service \
+    android.hardware.memtrack@1.0-impl \
+    libdrm.vendor \
+    libdrm
+
 # Dynamic Partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_BUILD_SUPER_PARTITION := false
