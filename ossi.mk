@@ -173,6 +173,23 @@ PRODUCT_COPY_FILES += \
 PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
 PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-image-profile.txt
 
+# Keymaster
+PRODUCT_PACKAGES += \
+   android.hardware.keymaster-V3-ndk_platform.vendor \
+   android.hardware.keymaster@3.0.vendor \
+   android.hardware.keymaster@4.0.vendor \
+   android.hardware.keymaster@4.1.vendor \
+   libkeymaster4.vendor:64 \
+   libkeymaster4support.vendor:64 \
+   libkeymaster4_1support.vendor:64 \
+   libkeymaster41.vendor:64 \
+   libkeymaster_messages.vendor:64 \
+   libkeymaster_portable.vendor:64 \
+   libpuresoftkeymasterdevice.vendor:64 \
+   libsoft_attestation_cert.vendor:64 \
+   libkeystore-wifi-hidl \
+   libkeystore-engine-wifi-hidl
+
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light-service.mt6877
