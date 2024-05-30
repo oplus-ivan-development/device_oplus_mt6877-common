@@ -154,6 +154,9 @@ SOONG_CONFIG_OPLUS_LINEAGE_TOUCH_HAL_INCLUDE_DIR := $(DEVICE_PATH)/touch/include
 # VINTF
 DEVICE_MANIFEST_FILE += $(COMMON_PATH)/configs/vintf/manifest.xml
 DEVICE_MATRIX_FILE += $(COMMON_PATH)/configs/vintf/compatibility_matrix.xml
+ODM_MANIFEST_SKUS += nfc
+ODM_MANIFEST_NFC_FILES := $(COMMON_PATH)/configs/vintf/manifest_nfc.xml
+ODM_MANIFEST_FILES := $(COMMON_PATH)/configs/vintf/manifest_odm.xml
 
 # inherit from the proprietary version
 #include vendor/oplus/mt6877-common/BoardConfigVendor.mk
