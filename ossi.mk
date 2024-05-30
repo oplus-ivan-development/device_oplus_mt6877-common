@@ -123,6 +123,17 @@ PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/seccomp/mediaextractor.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy \
     $(COMMON_PATH)/configs/seccomp/mediaswcodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaswcodec.policy
 
+# NFC
+PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.2-service \
+    com.android.nfc_extras \
+    NfcNci \
+    SecureElement \
+    Tag
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/permissions/nfc_features.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sku_nfc/nfc_features.xml
+
 # Overlays
 PRODUCT_ENFORCE_RRO_TARGETS := *
 
