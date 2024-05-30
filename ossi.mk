@@ -318,6 +318,7 @@ PRODUCT_COPY_FILES += \
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service-mediatek \
+    android.hardware.power-service.lineage-libperfmgr \
     android.hardware.power@1.0.vendor \
     android.hardware.power@1.1.vendor \
     android.hardware.power@1.2.vendor \
@@ -383,7 +384,8 @@ PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
     $(COMMON_PATH) \
     hardware/mediatek \
-    hardware/oplus
+    hardware/oplus \
+    hardware/lineage/interfaces/power-libperfmgr
 
 # Secure Element
 PRODUCT_PACKAGES += \
