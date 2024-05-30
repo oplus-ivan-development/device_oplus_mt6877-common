@@ -249,6 +249,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
 
+# VNDK
+PRODUCT_PACKAGES += \
+    libutils-v32 \
+    libcrypto-v32 \
+    libmedia_helper-v30
+
 #  WiFi
 PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.config@1.0.vendor \
