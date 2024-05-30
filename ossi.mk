@@ -194,6 +194,11 @@ PRODUCT_PACKAGES += \
    libkeystore-wifi-hidl \
    libkeystore-engine-wifi-hidl
 
+# Libshims
+PRODUCT_PACKAGES += \
+    libjni_shim \
+    libsensors_shim
+
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light-service.mt6877
