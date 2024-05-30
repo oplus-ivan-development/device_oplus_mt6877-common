@@ -66,6 +66,9 @@ BUILD_BROKEN_INCORRECT_PARTITION_IMAGES := true
 # Display
 TARGET_SCREEN_DENSITY := 480
 
+# UDFPS
+TARGET_SURFACEFLINGER_UDFPS_LIB := //hardware/oplus:libudfps_extension.oplus
+
 # Kernel
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
@@ -150,4 +153,4 @@ DEVICE_MANIFEST_FILE += $(COMMON_PATH)/configs/vintf/manifest.xml
 DEVICE_MATRIX_FILE += $(COMMON_PATH)/configs/vintf/compatibility_matrix.xml
 
 # inherit from the proprietary version
-include vendor/oplus/mt6877-common/BoardConfigVendor.mk
+#include vendor/oplus/mt6877-common/BoardConfigVendor.mk
