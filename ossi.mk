@@ -138,6 +138,13 @@ PRODUCT_PACKAGES += \
     android.hardware.gnss@2.1.vendor \
     android.hardware.gnss-V1-ndk_platform.vendor
 
+# Health
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.0 \
+    android.hardware.health@2.1-impl \
+    android.hardware.health@2.1-impl.recovery \
+    android.hardware.health@2.1-service
+
 # IMS
 PRODUCT_BOOT_JARS += \
     mediatek-common \
