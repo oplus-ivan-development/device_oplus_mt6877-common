@@ -53,6 +53,10 @@ PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_PACKAGES += \
     fastbootd
 
+# Doze
+PRODUCT_PACKAGES += \
+    OplusDoze
+
 # IMS
 PRODUCT_BOOT_JARS += \
     mediatek-common \
@@ -206,7 +210,8 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     $(DEVICE_PATH) \
     $(COMMON_PATH) \
-    hardware/mediatek
+    hardware/mediatek \
+    hardware/oplus
 
 # Sensors
 PRODUCT_PACKAGES += \
