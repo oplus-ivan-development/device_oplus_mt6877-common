@@ -113,6 +113,9 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 115888586752
 BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 104857600
 BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 104857600
 
+# Reserve space for gapps install
+-include vendor/lineage/config/BoardConfigReservedSize.mk
+
 # Properties
 TARGET_VENDOR_PROP += $(COMMON_PATH)/configs/props/vendor.prop
 TARGET_SYSTEM_PROP += $(COMMON_PATH)/configs/props/system.prop
