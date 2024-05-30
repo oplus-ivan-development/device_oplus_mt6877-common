@@ -443,6 +443,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.vibrator-service.mediatek
 
+# Viper4Android
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/prebuilt/viper/lib/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/prebuilt/viper/lib64/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/prebuilt/viper/etc/audio_effects.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_effects.conf
+
 #  WiFi
 PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.config@1.0.vendor \
