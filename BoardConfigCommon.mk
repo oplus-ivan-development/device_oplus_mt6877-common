@@ -134,6 +134,9 @@ BOARD_SUPER_PARTITION_GROUPS := main
 # Power
 TARGET_TAP_TO_WAKE_NODE := /proc/touchpanel/double_tap_enable
 
+# Ril
+ENABLE_VENDOR_RIL_SERVICE := true
+
 # Recovery
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_INCLUDE_RECOVERY_DTBO := true
