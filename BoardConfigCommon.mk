@@ -138,6 +138,9 @@ TARGET_COPY_OUT_PRODUCT := product
 TARGET_COPY_OUT_ODM := odm
 TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 
+# Lineage Health
+TARGET_HEALTH_CHARGING_CONTROL_CHARGING_PATH := /sys/class/oplus_chg/battery/mmi_charging_enable
+
 # Partitions (Dynamic)
 BOARD_MAIN_SIZE := 10196353024
 BOARD_MAIN_PARTITION_LIST := system system_ext vendor product odm
