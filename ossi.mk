@@ -17,7 +17,7 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
 PRODUCT_SHIPPING_API_LEVEL := 30
 
 # Vendor Log Tag
-include $(COMMON_PATH)/configs/props/logtag.mk
+include $(DEVICE_PATH)/configs/props/logtag.mk
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -388,12 +388,12 @@ PRODUCT_PACKAGES += \
 # Fastboot
 PRODUCT_PACKAGES += \
     init.recovery.mt6877.rc
-    
+
 # RealmeParts
-$(call inherit-product, packages/apps/RealmeParts/parts.mk)
+$(call inherit-product, packages/apps/OneplusParts/parts.mk)
 
 PRODUCT_COPY_FILES += \
-    packages/apps/RealmeParts/init/cabc.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/cabc.rc
+    packages/apps/OneplusParts/init/cabc.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/cabc.rc
 
 # Secure Element
 PRODUCT_PACKAGES += \
