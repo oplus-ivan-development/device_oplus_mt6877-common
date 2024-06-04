@@ -440,6 +440,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vendor.lineage.touch@1.0-service.oplus
 
+# Vibrator
+PRODUCT_PACKAGES += \
+    android.hardware.vibrator-service.mt6877
+
 # VNDK
 PRODUCT_PACKAGES += \
     libutils-v32 \
