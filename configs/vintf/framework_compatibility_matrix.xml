@@ -3,7 +3,7 @@
         oplus_framework_compatibility_matrix.xml
         device_framework_matrix.xml
 -->
-<compatibility-matrix version="4.0" type="framework">
+<compatibility-matrix version="5.0" type="framework">
 <hal format="hidl" optional="true">
         <name>android.hardware.media.c2</name>
         <version>1.0</version>
@@ -117,14 +117,6 @@
     </interface>
 </hal>
 <hal format="hidl" optional="true">
-    <name>android.hardware.wifi.supplicant</name>
-    <version>1.0-4</version>
-    <interface>
-        <name>ISupplicant</name>
-        <instance>default</instance>
-    </interface>
-</hal>
-<hal format="hidl" optional="true">
     <name>android.hardware.wifi</name>
     <version>1.0-6</version>
     <interface>
@@ -197,6 +189,14 @@
         <instance>default</instance>
     </interface>
 </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.camera.provider</name>
+        <version>2.4-6</version>
+        <interface>
+            <name>ICameraProvider</name>
+            <regex-instance>[^/]+/[0-9]+</regex-instance>
+        </interface>
+    </hal>
 <hal format="hidl" optional="true">
     <name>vendor.mediatek.hardware.camera.atms</name>
     <version>1.0</version>
