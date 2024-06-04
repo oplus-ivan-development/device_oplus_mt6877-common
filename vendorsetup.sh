@@ -11,7 +11,7 @@ git clone https://github.com/oneplus-mediatek-dev/vendor_oneplus_mt6877_common.g
 git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oplus/ivan
 
 # Hardware
-git clone -b lineage-20 https://github.com/LineageOS/android_hardware_oplus.git hardware/oplus
+git clone -b lineage-21 https://github.com/oneplus-mediatek-dev/android_hardware_oneplus.git hardware/oneplus
 git clone -b lineage-20 https://github.com/oplus-ossi-development/android_hardware_mediatek.git hardware/mediatek
 git clone -b lineage-20 https://github.com/oneplus-mediatek-dev/android_hardware_mediatek_wlan.git hardware/mediatek/wlan
 

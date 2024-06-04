@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+COMMON_PATH := device/oplus/mt6877-common
+
 # Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
@@ -326,17 +328,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml \
     $(LOCAL_PATH)/configs/permissions/com.android.hotwordenrollment.common.util.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/com.android.hotwordenrollment.common.util.xml
-    
+
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power-service-mediatek \
     android.hardware.power@1.0.vendor \
     android.hardware.power@1.1.vendor \
     android.hardware.power@1.2.vendor \
-    android.hardware.power-V2-ndk_platform.vendor \
-    vendor.mediatek.hardware.mtkpower@1.0.vendor \
-    vendor.mediatek.hardware.mtkpower@1.1.vendor \
-    vendor.mediatek.hardware.mtkpower@1.2.vendor
+    android.hardware.power-V2-ndk_platform.vendor
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/power_app_cfg.xml:$(TARGET_COPY_OUT_VENDOR)/etc/power_app_cfg.xml \
@@ -392,9 +390,6 @@ PRODUCT_PACKAGES += \
 # RealmeParts
 $(call inherit-product, packages/apps/OneplusParts/parts.mk)
 
-PRODUCT_COPY_FILES += \
-    packages/apps/OneplusParts/init/cabc.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/cabc.rc
-
 # Secure Element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.0.vendor \
@@ -429,7 +424,7 @@ PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
     $(COMMON_PATH) \
     hardware/mediatek \
-    hardware/oplus
+    hardware/oneplus
 
 # Thermal
 PRODUCT_PACKAGES += \
@@ -439,10 +434,6 @@ PRODUCT_PACKAGES += \
 # Touch
 PRODUCT_PACKAGES += \
     vendor.lineage.touch@1.0-service.oplus
-
-# Vibrator
-PRODUCT_PACKAGES += \
-    android.hardware.vibrator-service.mediatek
 
 # VNDK
 PRODUCT_PACKAGES += \
@@ -461,6 +452,7 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi.hostapd@1.0.vendor \
     android.hardware.wifi.hostapd@1.1.vendor \
     android.hardware.wifi.hostapd@1.2.vendor \
+    android.hardware.wifi@1.0-service-lazy \
     android.hardware.wifi.hostapd@1.3.vendor \
     android.hardware.wifi.supplicant@1.0.vendor \
     android.hardware.wifi.supplicant@1.1.vendor \
@@ -471,10 +463,7 @@ PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.control@1.0.vendor \
     android.hardware.tetheroffload.control@1.1.vendor \
     hostapd \
-    hostapd_cli 
-
-PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service-lazy.mt6877
+    hostapd_cli
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
