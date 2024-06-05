@@ -429,7 +429,7 @@ PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
     $(COMMON_PATH) \
     hardware/mediatek \
-    hardware/oneplus
+    hardware/oplus
 
 # Thermal
 PRODUCT_PACKAGES += \
@@ -443,6 +443,10 @@ PRODUCT_PACKAGES += \
 # Vibrator
 PRODUCT_PACKAGES += \
     android.hardware.vibrator-service.mt6877
+
+# Udfps
+PRODUCT_PACKAGES += \
+    UdfpsResources
 
 # VNDK
 PRODUCT_PACKAGES += \
