@@ -335,12 +335,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/com.android.hotwordenrollment.common.util.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/com.android.hotwordenrollment.common.util.xml
 
 # Power
-$(call inherit-product, $(COMMON_PATH)/power-libperfmgr/power-libperfmgr.mk)
-
 PRODUCT_PACKAGES += \
-    vendor.mediatek.hardware.mtkpower@1.2-service.stub
-
-PRODUCT_PACKAGES += \
+    android.hardware.power-service-mediatek \
+    android.hardware.power-V2-ndk_platform.vendor \
+    android.hardware.power@1.0.vendor \
+    android.hardware.power@1.1.vendor \
     android.hardware.power@1.2.vendor \
     vendor.mediatek.hardware.mtkpower@1.0.vendor \
     vendor.mediatek.hardware.mtkpower@1.1.vendor \
@@ -398,7 +397,7 @@ PRODUCT_PACKAGES += \
     init.recovery.mt6877.rc
 
 # RealmeParts
-$(call inherit-product, packages/apps/OneplusParts/parts.mk)
+#$(call inherit-product, packages/apps/OneplusParts/parts.mk)
 
 # Secure Element
 PRODUCT_PACKAGES += \
