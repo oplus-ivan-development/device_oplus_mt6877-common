@@ -7,7 +7,7 @@ git clone https://github.com/oneplus-mediatek-dev/Kernel_oneplus_ivan.git -b mai
 git clone https://github.com/oneplus-mediatek-dev/device_oneplus_ivan.git -b main device/oplus/ivan
 
 # Vendor
-git clone https://github.com/oneplus-mediatek-dev/vendor_oneplus_mt6877_common.git vendor/oplus/mt6877-common
+#git clone https://github.com/oneplus-mediatek-dev/vendor_oneplus_mt6877_common.git vendor/oplus/mt6877-common
 git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oplus/ivan
 
 # Hardware
