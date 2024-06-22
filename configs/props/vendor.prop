@@ -150,6 +150,21 @@ ro.vendor.mtk_gps_support=1
 ro.vendor.gps.chrdev=gps_drv
 ro.vendor.mtk_log_hide_gps=0
 
+# IMS
+ro.vendor.md_auto_setup_ims=1
+persist.vendor.ims_support=1
+persist.vendor.mtk_dynamic_ims_switch=1
+persist.vendor.mtk_wfc_support=1
+persist.vendor.volte_support=1
+persist.vendor.mtk.volte.enable=1
+persist.vendor.vilte_support=1
+persist.vendor.viwifi_support=1
+persist.vendor.mtk_ct_volte_support=3
+
+# Init
+ro.vendor.rc=/vendor/etc/init/hw/
+ro.vendor.init.sensor.rc=init.sensor_2_0.rc
+
 # Radio
 vendor.connsys.driver.ready=no
 telephony.lteOnCdmaDevice=1
@@ -157,7 +172,13 @@ telephony.active_modems.max_count=2
 ro.telephony.default_network=33,33,33,33
 persist.vendor.log.tel_log_ctrl=1
 persist.vendor.mims_support=2
+ro.vendor.md_mims_support=2
 persist.vendor.factory.GB2312=yes
+
+# Priv-app Permissions
+ro.control_privapp_permissions=enforce
+
+# Radio
 persist.vendor.radio.fd.counter=150
 persist.vendor.radio.fd.off.counter=50
 persist.vendor.radio.fd.r8.counter=150
@@ -192,7 +213,7 @@ ro.vendor.mtk_embms_support=1
 ro.vendor.mtk_sim_card_onoff=3
 ro.vendor.sim_me_lock_mode=3
 ro.vendor.mtk_external_sim_support=1
-ro.vendor.mtk_world_phone_policy=0
+ro.vendor.mtk_world_phone_policy=1
 ro.vendor.mtk_external_sim_only_slots=0
 ro.vendor.radio.max.multisim=dsds
 ro.telephony.sim.count=2
@@ -206,17 +227,6 @@ ro.vendor.mtk_c2k_support=1
 ro.vendor.mtk_ps1_rat=N/C/Lf/Lt/W/G
 ro.vendor.mtk_lte_support=1
 ro.vendor.mtk_c2k_support=1
-
-# IMS
-ro.vendor.md_auto_setup_ims=1
-persist.vendor.ims_support=1
-persist.vendor.mtk_dynamic_ims_switch=1
-persist.vendor.mtk_wfc_support=1
-persist.vendor.volte_support=1
-persist.vendor.mtk.volte.enable=1
-persist.vendor.vilte_support=1
-persist.vendor.viwifi_support=1
-persist.vendor.mtk_ct_volte_support=3
 
 # Storage
 ro.vendor.mtk_f2fs_enable=1
@@ -285,17 +295,6 @@ ro.zram.mark_idle_delay_mins=60
 ro.zram.first_wb_delay_mins=1440
 ro.zram.periodic_wb_delay_hours=2
 
-# Logging
-persist.log.tag.libPowerHal=I
-persist.log.tag.mtkpower@impl=I
-persist.log.tag.mtkpower_client=I
-persist.log.tag.UxUtility=I
-persist.log.tag.PowerHalAddressUitls=I
-persist.log.tag.PowerHalMgrImpl=I
-persist.log.tag.PowerHalMgrServiceImpl=I
-persist.log.tag.PowerHalWifiMonitor=I
-persist.log.tag.RILMUXD=I
-persist.log.tag.UxUtility=I
 
 # default refresh rate threshold
 debug.sf.frame_rate_multiple_threshold=0
