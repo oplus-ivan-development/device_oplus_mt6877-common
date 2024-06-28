@@ -294,7 +294,3 @@ ro.vendor.wifi.sap.concurrent.iface=ap1
 ro.zram.mark_idle_delay_mins=60
 ro.zram.first_wb_delay_mins=1440
 ro.zram.periodic_wb_delay_hours=2
-
-
-# default refresh rate threshold
-debug.sf.frame_rate_multiple_threshold=0
