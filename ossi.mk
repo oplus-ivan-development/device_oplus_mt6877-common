@@ -20,7 +20,6 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 
 # Vendor Log Tag
 include $(DEVICE_PATH)/configs/props/logtag.mk
-include vendor/lineage-priv/keys/keys.mk
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -448,10 +447,6 @@ PRODUCT_PACKAGES += \
 # Vibrator
 PRODUCT_PACKAGES += \
     android.hardware.vibrator-service.mt6877
-
-# Udfps
-PRODUCT_PACKAGES += \
-    UdfpsResources
 
 # VNDK
 PRODUCT_PACKAGES += \
