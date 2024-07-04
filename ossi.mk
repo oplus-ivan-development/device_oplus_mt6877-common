@@ -398,9 +398,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     init.recovery.mt6877.rc
 
-# RealmeParts
-#$(call inherit-product, packages/apps/OneplusParts/parts.mk)
-
 # Secure Element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.0.vendor \
