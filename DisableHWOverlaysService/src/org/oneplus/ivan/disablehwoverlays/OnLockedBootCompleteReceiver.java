@@ -1,4 +1,4 @@
-package org.realme.ivan.disablehwoverlays;
+package org.oneplus.ivan.disablehwoverlays;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
