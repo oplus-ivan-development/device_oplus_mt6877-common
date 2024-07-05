@@ -432,6 +432,7 @@ PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
     $(COMMON_PATH) \
     hardware/mediatek \
+    hardware/mediatek/libmtkperf_client \
     hardware/oplus
 
 # Thermal
