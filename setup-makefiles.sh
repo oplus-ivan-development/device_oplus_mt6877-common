@@ -18,8 +18,8 @@
 
 set -e
 
-export DEVICE=mt6877-common
-export VENDOR=oplus
+export DEVICE=ivan
+export VENDOR=oneplus
 
 INITIAL_COPYRIGHT_YEAR=2021
 
