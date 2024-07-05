@@ -1,13 +1,10 @@
 #!/bin/bash
 
 # kernel
-git clone https://github.com/oneplus-mediatek-dev/Kernel_oneplus_ivan.git -b main kernel/oplus/mt6877
-
-# device tree
-git clone https://github.com/oneplus-mediatek-dev/device_oneplus_ivan.git -b main device/oplus/ivan
+git clone https://github.com/oneplus-mediatek-dev/Kernel_oneplus_ivan.git -b main kernel/oneplus/ivan
 
 # Vendor
-git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oplus/ivan
+git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oneplus/ivan
 
 # Hardware
 git clone -b lineage-20 https://github.com/oneplus-mediatek-dev/android_hardware_mediatek.git hardware/mediatek
