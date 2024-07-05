@@ -475,4 +475,4 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf
 
 # Inherit Vendor Blobs
-$(call inherit-product, vendor/oneplus/ivan/ivan-vendor.mk)
+$(call inherit-product, vendor/oplus/ivan/ivan-vendor.mk)

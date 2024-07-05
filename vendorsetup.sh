@@ -4,7 +4,7 @@
 git clone https://github.com/oneplus-mediatek-dev/Kernel_oneplus_ivan.git -b main kernel/oneplus/ivan
 
 # Vendor
-git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oneplus/ivan
+git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oplus/ivan
 
 # Hardware
 git clone -b lineage-20 https://github.com/oneplus-mediatek-dev/android_hardware_mediatek.git hardware/mediatek
