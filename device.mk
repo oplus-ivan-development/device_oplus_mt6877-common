@@ -52,7 +52,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     MtkInCallService \
-    BesLoudness \
     PowerOffAlarm
 
 PRODUCT_COPY_FILES += \
@@ -180,20 +179,16 @@ PRODUCT_PACKAGES += \
 
 # IMS
 PRODUCT_BOOT_JARS += \
+    mediatek-carrier-config-manager \
     mediatek-common \
     mediatek-framework \
-    mediatek-gwsd \
-    mediatek-gwsdv2 \
     mediatek-ims-base \
     mediatek-ims-common \
-    mediatek-ims-extension-plugin \
-    mediatek-ims-legacy \
     mediatek-telecom-common \
     mediatek-telephony-base \
     mediatek-telephony-common \
-    mediatek-wfo-legacy \
-    oplus-framework-telephony \
     oplus-framework \
+    oplus-support-wrapper
 
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/permissions/privapp-permissions-mediatek.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-mediatek.xml
@@ -221,7 +216,7 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light-service.mt6877
+    android.hardware.light-service.ivan
 
 # Media
 PRODUCT_PACKAGES += \
@@ -461,18 +456,18 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.config@1.0.vendor \
     android.hardware.tetheroffload.control@1.0.vendor \
-    android.hardware.tetheroffload.control@1.1.vendor
-
-PRODUCT_PACKAGES += \
-    android.hardware.wifi-service \
+    android.hardware.tetheroffload.control@1.1.vendor \
+    android.system.keystore2-V1-ndk.vendor \
+    android.hardware.wifi@1.0-service-lazy \
+    wpa_supplicant \
     hostapd \
-    libwifi-hal-wrapper \
-    wpa_supplicant
+    hostapd_cli \
+    libwifi-hal-mt66xx
 
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
-    $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
-    $(DEVICE_PATH)/configs/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf
+    $(DEVICE_PATH)/configs/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf \
+    $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 # Inherit Vendor Blobs
 $(call inherit-product, vendor/oplus/ivan/ivan-vendor.mk)
