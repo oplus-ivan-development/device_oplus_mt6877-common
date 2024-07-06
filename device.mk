@@ -52,7 +52,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     MtkInCallService \
-    BesLoudness \
     PowerOffAlarm
 
 PRODUCT_COPY_FILES += \
@@ -180,20 +179,16 @@ PRODUCT_PACKAGES += \
 
 # IMS
 PRODUCT_BOOT_JARS += \
+    mediatek-carrier-config-manager \
     mediatek-common \
     mediatek-framework \
-    mediatek-gwsd \
-    mediatek-gwsdv2 \
     mediatek-ims-base \
     mediatek-ims-common \
-    mediatek-ims-extension-plugin \
-    mediatek-ims-legacy \
     mediatek-telecom-common \
     mediatek-telephony-base \
     mediatek-telephony-common \
-    mediatek-wfo-legacy \
-    oplus-framework-telephony \
     oplus-framework \
+    oplus-support-wrapper
 
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/permissions/privapp-permissions-mediatek.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-mediatek.xml
