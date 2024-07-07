@@ -25,13 +25,13 @@ COMPACT=hardware/lineage/compat/Android.bp
 if ! [ -a $COMPACT ]; then git clone --depth=1 https://github.com/LineageOS/android_hardware_lineage_compat -b lineage-20.0 hardware/lineage/compat
 fi
 MTK=hardware/mediatek/Android.bp
-if ! [ -a $MTK ]; then git clone --depth=1 https://github.com/nishant6342/android_hardware_mediatek -b lineage-20 hardware/mediatek
+if ! [ -a $MTK ]; then git clone --depth=1 https://github.com/Notganesh/android_hardware_mediatek.git -b lineage-20 hardware/mediatek
 fi
 CLANG17=prebuilts/clang/host/linux-x86/clang-r383902/bin/clang
 if ! [ -a $CLANG17 ]; then git clone --depth=1 https://github.com/oneplus-mediatek-dev/android_prebuilts_clang_host_linux-x86_clang-6443078.git -b 11.0.1 prebuilts/clang/host/linux-x86/clang-r383902
 fi
 OPLUS=hardware/oplus/Android.mk
-if ! [ -a $OPLUS ]; then git clone --depth=1 https://github.com/nishant6342/android_hardware_oplus hardware/oplus
+if ! [ -a $OPLUS ]; then git clone https://github.com/Notganesh/android_hardware_oplus.git hardware/oplus
 fi
 WLAN=hardware/mediatek/wlan/Android.mk
 if ! [ -a $WLAN ]; then git clone --depth=1 https://github.com/nishant6342/android_hardware_mediatek_wlan hardware/mediatek/wlan
