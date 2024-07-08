@@ -287,6 +287,7 @@ PRODUCT_PACKAGES += \
     WifiOverlay \
     TetheringConfigOverlay \
     CarrierConfigOverlay \
+    FrameworksResOverlayivan \
     SettingsProviderOverlay
 
 # Permissions
