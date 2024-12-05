@@ -1,20 +1,15 @@
 #!/bin/bash
 
-# kernel
-git clone https://github.com/oneplus-mediatek-dev/Kernel_oneplus_ivan.git -b main kernel/oplus/mt6877
+git clone https://github.com/Notganesh/kernel_oneplus_ivan.git -b vooc kernel/oplus/mt6877
 
-# device tree
-git clone https://github.com/oneplus-mediatek-dev/device_oneplus_ivan.git -b main device/oplus/ivan
+git clone https://github.com/oplus-ivan-development/android_device_oplus_ivan.git device/oplus/ivan
 
-# Vendor
-git clone https://github.com/oneplus-mediatek-dev/vendor_oplus_ivan.git vendor/oplus/ivan
+git clone https://gitlab.com/Ko_Hi/vendor_ivan.git vendor/oplus/ivan
 
-# Hardware
-git clone -b lineage-20 https://github.com/oneplus-mediatek-dev/android_hardware_mediatek.git hardware/mediatek
-git clone -b lineage-20 https://github.com/oneplus-mediatek-dev/android_hardware_mediatek_wlan.git hardware/mediatek/wlan
-git clone -b lineage-20 https://github.com/oneplus-mediatek-dev/android_hardware_oplus.git hardware/oplus
+git clone -b lineage-20 https://github.com/LineageOS/android_hardware_oplus.git hardware/oplus
 
-# Sepolicy
+git clone -b lineage-20 https://github.com/LineageOS/android_hardware_mediatek.git hardware/mediatek
+
 git clone -b lineage-20 https://github.com/LineageOS/android_device_mediatek_sepolicy_vndr.git device/mediatek/sepolicy_vndr
 
 # clang
