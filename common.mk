@@ -21,6 +21,10 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 # Vendor Log Tag
 include $(DEVICE_PATH)/configs/props/logtag.mk
 
+# Device-specific background service
+PRODUCT_PACKAGES += \
+    OssiDeviceService
+
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio.service \
