@@ -1,3 +1,7 @@
+on init
+    # Update fastcharge firmware
+    write /proc/fastchg_fw_update 1
+
 on boot
     stop console
 
