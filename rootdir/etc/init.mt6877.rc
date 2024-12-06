@@ -1,5 +1,6 @@
 import /vendor/etc/init/hw/init.connectivity.rc
 import /vendor/etc/init/hw/init.mt6877.usb.rc
+import /FWUpgradeInit.rc
 import /vendor/etc/init/hw/init.project.rc
 import /vendor/etc/init/hw/init.sensor_2_0.rc
 import /vendor/etc/init/hw/init.stnfc.rc
@@ -79,8 +80,6 @@ on init
     chmod 0664 /sys/class/oplus_chg/battery/bcc_parms
     chmod 0664 /proc/charger/reserve_soc_debug
     write /sys/class/oplus_chg/battery/fast_charge 1
-
-
 
 on late-init
     # enable rcu_expedited
@@ -192,6 +191,8 @@ on post-fs
 
     # allow ccci_mdinit access ccci_dump
     chown root system /proc/ccci_dump
+    on property:sys.boot_completed=1
+	write /sys/devices/virtual/oplus_chg/usb/otg_switch 1
 
 on post-fs-data
     # boot time fs tune
