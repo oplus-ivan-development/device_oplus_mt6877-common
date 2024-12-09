@@ -4,6 +4,7 @@ on init
 
 on boot
     stop console
+    stop statsd
 
     # Change ownership and permission for vibrator
     chown system system /sys/class/leds/vibrator/brightness
