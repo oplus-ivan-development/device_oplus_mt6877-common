@@ -361,6 +361,12 @@
     <!-- Whether a software navigation bar should be shown. NOTE: in the future this may be
          autodetected from the Configuration. -->
     <bool name="config_showNavigationBar">true</bool>
+    
+    <!-- Whether the device enable the standalone (SA) mode of 5G NR.-->
+    <bool name="config_telephony5gStandalone">true</bool>
+
+    <!-- Whether the device enable the non-standalone (NSA) mode of 5G NR.-->
+    <bool name="config_telephony5gNonStandalone">true</bool>
 
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
