@@ -11,7 +11,10 @@
 /dev/oplus_display                                                                                                     u:object_r:oplus_display_device:s0
 
 # Light
-/(vendor|system/vendor)/bin/hw/android\.hardware\.light-service\.mt6877                                                 u:object_r:hal_light_default_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.light-service.mt6877                                  u:object_r:hal_light_default_exec:s0
+
+# Nfc
+/dev/nq-nci                                                                                             u:object_r:nfc_device:s0
 
 # Sensors
 /(vendor|system/vendor)/bin/hw/android\.hardware\.sensors@2\.0-service-multihal\.mt6877                                 u:object_r:mtk_hal_sensors_exec:s0
