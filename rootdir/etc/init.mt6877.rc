@@ -1,21 +1,18 @@
 import /vendor/etc/init/hw/init.connectivity.rc
 import /vendor/etc/init/hw/init.mt6877.usb.rc
-import /FWUpgradeInit.rc
+import /vendor/etc/init/hw/init.nfc_detect.rc
 import /vendor/etc/init/hw/init.project.rc
-import /vendor/etc/init/hw/init.sensor_2_0.rc
-import /vendor/etc/init/hw/init.stnfc.rc
+import /vendor/etc/init/hw/init.sensor_1_0.rc
 import /vendor/etc/init/hw/init.cgroup.rc
 import /vendor/etc/init/hw/init.modem.rc
 
 on early-init
-    # boot perf. tune
     write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "0 0 0 0"
-    write /sys/devices/platform/boot_dramboost/dramboost/dramboost 1
-    mount debugfs debugfs /sys/kernel/debug
-    chmod 0755 /sys/kernel/debug
+    write /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp -1
+    write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
 
 on init
-    # change lk_env permission
+# change lk_env permission
     chown root system /proc/lk_env
     chmod 0660 /proc/lk_env
 
@@ -26,75 +23,26 @@ on init
     # update cpus for cpuset cgroup
     write /dev/cpuset/foreground/cpus 0-7
     write /dev/cpuset/foreground/boost/cpus 0-7
-    write /dev/cpuset/background/cpus 0-5
-    write /dev/cpuset/system-background/cpus 0-5
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
     write /dev/cpuset/top-app/cpus 0-7
-
-    #fangxiang@BSP.Power.Framework, 2020/12/17, add for MIDAS
-    chown system system /dev/midas_dev
-    chmod 0660 /dev/midas_dev
-
-    #BSP.Power.Framework, 2020/12/17, add for MIDAS binder_stats
-    chown system system /dev/binder_stats
-    chmod 0660 /dev/binder_stats
-
-# Set permissions on oplus_chg nodes
-    chown system system /sys/class/oplus_chg/battery/short_c_hw_status
-    chown system system /sys/class/oplus_chg/battery/short_c_hw_feature
-    chown system system /sys/class/oplus_chg/battery/short_c_limit_chg
-    chown system system /sys/class/oplus_chg/battery/short_c_limit_rechg
-    chown system system /sys/class/oplus_chg/battery/short_ic_volt_thresh
-    chown system system /sys/class/oplus_chg/battery/short_ic_otp_status
-    chown system system /sys/class/oplus_chg/battery/short_ic_otp_value
-    chown system system /sys/class/oplus_chg/battery/ship_mode
-    chown system system /sys/class/oplus_chg/battery/cool_down
-    chown system system /sys/class/oplus_chg/battery/bcc_current
-    chown system system /sys/class/oplus_chg/battery/bcc_exception
-    chown system system /sys/class/oplus_chg/battery/call_mode
-    chown system system /sys/class/oplus_chg/battery/mmi_charging_enable
-    chown system system /sys/class/oplus_chg/battery/soc_ajust
-    chown system system /sys/class/oplus_chg/usb/otg_switch
-    chown system system /sys/class/oplus_chg/usb/usb_status
-    chown system system /sys/class/oplus_chg/common/mutual_cmd
-    chown system system /sys/module/oplus_chg/parameters/gauge_dbg_tbat
-    chown system system /sys/class/oplus_chg/battery/bcc_parms
-    chown system system /proc/charger/reserve_soc_debug
-    chmod 0664 /sys/class/oplus_chg/battery/short_c_hw_status
-    chmod 0664 /sys/class/oplus_chg/battery/short_c_hw_feature
-    chmod 0664 /sys/class/oplus_chg/battery/short_c_limit_chg
-    chmod 0664 /sys/class/oplus_chg/battery/short_c_limit_rechg
-    chmod 0664 /sys/class/oplus_chg/battery/short_ic_volt_thresh
-    chmod 0664 /sys/class/oplus_chg/battery/short_ic_otp_status
-    chmod 0664 /sys/class/oplus_chg/battery/short_ic_otp_value
-    chmod 0664 /sys/class/oplus_chg/battery/ship_mode
-    chmod 0664 /sys/class/oplus_chg/battery/cool_down
-    chmod 0664 /sys/class/oplus_chg/battery/bcc_current
-    chmod 0664 /sys/class/oplus_chg/battery/bcc_exception
-    chmod 0664 /sys/class/oplus_chg/battery/call_mode
-    chmod 0664 /sys/class/oplus_chg/battery/mmi_charging_enable
-    chmod 0664 /sys/class/oplus_chg/battery/soc_ajust
-    chmod 0664 /sys/class/oplus_chg/usb/otg_switch
-    chmod 0664 /sys/class/oplus_chg/usb/usb_status
-    chmod 0664 /sys/class/oplus_chg/common/mutual_cmd
-    chmod 0664 /sys/module/oplus_chg/parameters/gauge_dbg_tbat
-    chmod 0664 /sys/class/oplus_chg/battery/bcc_parms
-    chmod 0664 /proc/charger/reserve_soc_debug
-    write /sys/class/oplus_chg/battery/fast_charge 1
 
 on late-init
     # enable rcu_expedited
     write /sys/kernel/rcu_expedited 1
 
 on charger
-    exec /system/bin/e2fsck -f -p /dev/block/by-name/cache
-    mount ext4 /dev/block/by-name/cache /cache rw wait
+    write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "-1 -1 -1 -1"
+    write /sys/devices/platform/10012000.dvfsrc_top/helio-dvfsrc/dvfsrc_debug "kir_emi -1"
+    exec /system/bin/e2fsck -f -p /dev/block/platform/bootdevice/by-name/cache
+    mount ext4 /dev/block/platform/bootdevice/by-name/cache /cache rw wait
     chmod 0660 /dev/spm
     chown system system /dev/spm
     start spm_script
     chmod 0666 /dev/kmsg
     chmod 0775 /mnt/vendor
     mkdir /mnt/vendor/nvcfg
-    mount ext4 /dev/block/by-name/nvcfg /mnt/vendor/nvcfg rw wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/nvcfg /mnt/vendor/nvcfg rw wait
     chown system system /mnt/vendor/nvcfg
     chmod 0771 /mnt/vendor/nvcfg
     restorecon_recursive /mnt/vendor/nvcfg
@@ -110,8 +58,8 @@ on charger
     chmod 0660 /sys/power/wake_lock
     chmod 0660 /sys/power/wake_unlock
     chmod 0660 /sys/power/wakeup_count
+    write /sys/power/pm_async 0
     write /sys/power/pm_freeze_timeout 2000
-
     start fuelgauged
     start fuelgauged_nvram
 
@@ -120,14 +68,10 @@ on charger
     chown system system /sys/class/leds/green/brightness
 
     start vendor.light-default
-    # switch to sched-dvfs
-    write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor "schedutil"
-    write /sys/devices/system/cpu/cpufreq/policy6/scaling_governor "schedutil"
 
 on fs
-    # mount fstab
+    wait_for_prop hwservicemanager.ready "true"
     mount_all --early
-
     write /sys/block/zram0/comp_algorithm lz4
     write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 100
@@ -136,63 +80,17 @@ on fs
 
 on late-fs
     wait_for_prop hwservicemanager.ready "true"
-
     mount_all --late
 
 on post-fs
-    #change permissions for mediaserver
-    chown root media /proc/clkmgr/mipi_test
-
-    #change permission for engineer mode
-    chown radio system /proc/clkmgr/pll_test
-    chown radio system /proc/clkmgr/pll_fsel
-    chmod 0664 /proc/clkmgr/pll_test
-    chmod 0664 /proc/clkmgr/pll_fsel
-    #change permission for engineer mode
-    chown radio system /proc/freqhopping/dramc
-    chown radio system /proc/freqhopping/dumpregs
-    chown radio system /proc/freqhopping/freqhopping_debug
-    chown radio system /proc/freqhopping/status
-    chown radio system /proc/freqhopping/userdef
-
-    # Support A/B feature for emmc boot region
-    symlink /dev/block/sda /dev/block/mmcblk0boot0
-    symlink /dev/block/sdb /dev/block/mmcblk0boot1
-    symlink /dev/block/mmcblk0boot0 /dev/block/by-name/preloader_a
-    symlink /dev/block/mmcblk0boot1 /dev/block/by-name/preloader_b
-
-    # Support A/B feature for combo emmc and ufs OTA update
-    symlink /dev/block/by-name/preloader_a /dev/block/by-name/preloader_emmc_a
-    symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
-    symlink /dev/block/by-name/preloader_a /dev/block/by-name/preloader_ufs_a
-    symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
-
-    # Support A/B feature for combo emmc and ufs OTA update
-    symlink /dev/block/by-name/preloader_a /dev/block/by-name/preloader_emmc_a
-    symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
-    symlink /dev/block/by-name/preloader_a /dev/block/by-name/preloader_ufs_a
-    symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
-
-    symlink /dev/block/mapper/pl_a /dev/block/by-name/preloader_raw_a
-    symlink /dev/block/mapper/pl_b /dev/block/by-name/preloader_raw_b
-    symlink /dev/block/mapper/pl_a /dev/block/platform/bootdevice/by-name/preloader_raw_a
-    symlink /dev/block/mapper/pl_b /dev/block/platform/bootdevice/by-name/preloader_raw_b
-
-# change owner
-    chown root system /proc/mtprof/cputime
-    chown root system /proc/mtprof/reboot_pid
+    # boot perf. tune
+    write /proc/sys/kernel/sched_stune_task_threshold 0
 
     chown system system /mnt/vendor/protect_f
     chmod 0770 /mnt/vendor/protect_f
 
     chown system system /mnt/vendor/protect_s
     chmod 0770 /mnt/vendor/protect_s
-    chown root log /proc/ccci_sib
-
-    # allow ccci_mdinit access ccci_dump
-    chown root system /proc/ccci_dump
-    on property:sys.boot_completed=1
-	write /sys/devices/virtual/oplus_chg/usb/otg_switch 1
 
 on post-fs-data
     # boot time fs tune
@@ -222,55 +120,50 @@ on post-fs-data
     chmod 0771 /mnt/vendor/nvdata
     mkdir /mnt/vendor/nvdata/media 0771 media audio
 
-    #Create cct mount point
+    # AudioDump
+    mkdir /data/vendor/audiohal 0771 system audio
+    mkdir /data/vendor/audiohal/audio_param 0771 system audio
+
+    # Create cct mount point
     mkdir /mnt/vendor/cct
     chown root system /mnt/vendor/cct
     chmod 0771 /mnt/vendor/cct
 
-    #Create flash folder
-    mkdir /data/vendor/flash
-    chown root system /data/vendor/flash
-    chmod 0771 /data/vendor/flash
-
-    #Create pdo folder
-    mkdir /data/vendor/pdo
-    chown root system /data/vendor/pdo
-    chmod 0771 /data/vendor/pdo
-
-    #Create AFObitTrue folder
-    mkdir /data/vendor/AFObitTrue
-    chown root system /data/vendor/AFObitTrue
-    chmod 0771 /data/vendor/AFObitTrue
-
-    #Create shading mount point
-    mkdir /data/vendor/shading
-    chown root system /data/vendor/shading
-    chmod 0771 /data/vendor/shading
-
-    #Create shading_otp mount point
-    mkdir /data/vendor/shading_otp
-    chown root system /data/vendor/shading_otp
-    chmod 0771 /data/vendor/shading_otp
-
-    #Create NDD mount point
-    mkdir /data/vendor/camera_dump
-    chown root system /data/vendor/camera_dump
-    chmod 0771 /data/vendor/camera_dump
-
-    #Create Camera Dip Debug Folder
+    # Create Camera Dip Debug Folder
     mkdir /data/vendor/dipdebug
     chown root system /data/vendor/dipdebug
     chmod 0771 /data/vendor/dipdebug
 
-    #Create flicker mount point
+    # Create flash folder
+    mkdir /data/vendor/flash
+    chown root system /data/vendor/flash
+    chmod 0771 /data/vendor/flash
+
+    # Create shading mount point
+    mkdir /data/vendor/shading
+    chown root system /data/vendor/shading
+    chmod 0771 /data/vendor/shading
+
+    # Create shading_otp mount point
+    mkdir /data/vendor/shading_otp
+    chown root system /data/vendor/shading_otp
+    chmod 0771 /data/vendor/shading_otp
+
+    # Create NDD mount point
+    mkdir /data/vendor/camera_dump
+    chown root system /data/vendor/camera_dump
+    chmod 0771 /data/vendor/camera_dump
+
+    # Create flicker mount point
     mkdir /data/vendor/flicker
     chown root system /data/vendor/flicker
     chmod 0771 /data/vendor/flicker
 
     # Set SELinux security contexts on upgrade or policy update.
     restorecon_recursive /mnt/vendor/nvdata
+    restorecon_recursive /mnt/vendor/persist
 
-    #give system access to rfkill device node
+    # give system access to rfkill device node
     chmod 0660 /dev/rfkill
 
     # create for muxd pts device node , to operate without root
@@ -280,7 +173,6 @@ on post-fs-data
     chown system system /dev/spm
 
     # GPS
-    chmod 0775 /vendor/xbin/MPED
     chmod 0666 /dev/gps_emi
 
     # SCP log
@@ -296,14 +188,10 @@ on post-fs-data
     # ADSP log
     chmod 0660 /sys/class/misc/adsp_0/log_enable
     chown root system /sys/class/misc/adsp_0/log_enable
-    chmod 0660 /sys/class/misc/adsp_1/log_enable
-    chown root system /sys/class/misc/adsp_1/log_enable
     chmod 0660 /dev/adsp
     chown root media /dev/adsp
     chmod 0440 /dev/adsp_0
     chown system media /dev/adsp_0
-    chmod 0440 /dev/adsp_1
-    chown system media /dev/adsp_1
 
     # SSPM log
     chmod 0620 /sys/class/misc/sspm/sspm_mobile_log
@@ -311,14 +199,10 @@ on post-fs-data
     chmod 0440 /dev/sspm
     chown root system /dev/sspm
 
-    # radvd
-    chmod 444 /etc/radvd/radvd.conf
-
     # Mali 3D GPU driver
     chmod 666 /dev/mali0
 
     # Touch Panel
-    # chmod 0664 /dev/touch
     chown root diag /sys/module/tpd_setting/parameters/tpd_calmat
     chown root diag /sys/module/tpd_setting/parameters/tpd_em_debounce_time
     chown root diag /sys/module/tpd_setting/parameters/tpd_mode
@@ -337,87 +221,89 @@ on post-fs-data
     # set ptmx group to non-root
     chown root radio /dev/ptmx
 
-    # RTC
-    chmod 660 /dev/alarm
-    chown root system /dev/alarm
-
     # M4U
     chmod 0444 /dev/m4u
     chmod 0640 /proc/m4u
     chown system media /proc/m4u
-    chmod 0640 /proc/mtk_iommu
-    chown system media /proc/mtk_iommu
+
+    #set mlock to 64MB for netd
+    setrlimit 8 67108864 67108864
 
     #set mlock limit to infinate (for m4u operation)
     setrlimit 8 -1 -1
 
     # CMDQ
-    chmod 0640 /dev/mtk_mdp
-    chown system system /dev/mtk_mdp
+    chmod 0644 /dev/mtk_cmdq
+    chown system system /dev/mtk_cmdq
 
     # MDP SYNC
-    chmod 0640 /dev/mdp_sync
+    chmod 0644 /dev/mdp_sync
     chown system system /dev/mdp_sync
 
-    #OFFLOAD SERVICE
+    # OFFLOAD SERVICE
     chmod 0640 /dev/offloadservice
     chown media media /dev/offloadservice
 
-    #OPEN DSP
+    # OPEN DSP
     chmod 0640 /dev/audio_ipi
     chown media media /dev/audio_ipi
 
-    #SmartPA
+    # SmartPA
     chmod 0640 /dev/audio_scp
     chown media media /dev/audio_scp
     chown audioserver audio /sys/bus/platform/devices/rt5509_param.0/prop_param
     chown audioserver audio /sys/bus/platform/devices/rt5509_param.1/prop_param
+    chown audioserver audio /sys/bus/platform/devices/mt6660-param.0/prop_params
 
-    #Accdet
+    # Audio Boost
+    write /dev/stune/rt/schedtune.boost 30
+
+    # Accdet
     chown root radio /sys/devices/platform/Accdet_Driver/driver/accdet_call_state
 
-    #Fingerprint
+    # Fingerprint
     chmod 0666 /dev/goodix_fp
 
-    #v4l2 codec
+    # VideoCodec
     chmod 0660 /dev/vcu
     chown media system /dev/vcu
     chmod 0660 /dev/video0
-    chown media system /dev/video0
+    chown mediacodec system /dev/video0
     chmod 0660 /dev/video1
-    chown media system /dev/video1
+    chown mediacodec system /dev/video1
     mkdir /data/vendor/vcodec 0777 media system
     mkdir /data/vendor/vcodec/log 0770 media system
     mkdir /data/vendor/vcodec/in 0770 media system
     mkdir /data/vendor/vcodec/out 0770 media system
 
     #MJC
-    #insmod /vendor/lib/modules/mjc_kernel_driver.ko
     chmod 0660 /dev/MJC
     chown media system /dev/MJC
 
-    #kpd
+    # kpd
     chown radio radio /sys/devices/platform/mtk-kpd/driver/kpd_call_state
 
-    #Charging Battery
+    # Charging Battery
     chown radio radio /sys/devices/platform/battery/Charging_CallState
 
     # PMIC property
     chown radio system /sys/devices/platform/mt-pmic/low_battery_protect_stop
     chown radio system /sys/devices/platform/mt-pmic/low_battery_protect_ut
 
-    #MDDB
+    # MDDB
     mkdir /data/vendor_de/meta 0770 system system
     mkdir /data/vendor_de/meta/mddb 0770 system system
 
+    chmod 0660 /data/misc/acdapi/calib.dat
+    chmod 0660 /data/misc/acdapi/param.dat
+    chmod 0660 /data/misc/acdapi/sensors.dat
     chown system /sys/devices/platform/msensor/driver/cpsopmode
     chown system /sys/devices/platform/msensor/driver/cpsreptxy
     chown system /sys/devices/platform/msensor/driver/cpsreptz
     chown system /sys/devices/platform/gsensor/driver/cpsopmode
     chown system /sys/devices/platform/gsensor/driver/cpsrange
 
-    # chenjun@MultiMedia.Display.LCD 2021/08/23,
-    # add for cabc and silence node
+    # Oplus Display
     chown system system /sys/kernel/oplus_display/LCM_CABC
     chown system system /sys/kernel/oplus_display/sau_closebl_node
     chown system system /sys/kernel/oplus_display/hbm
@@ -430,39 +316,25 @@ on post-fs-data
     chmod 0664 /sys/devices/virtual/mtk_disp_mgr/mtk_disp_mgr/LCM_ESS
     chown system system /sys/kernel/oplus_display/ffl_set
     chmod 0666 /sys/kernel/oplus_display/ffl_set
-    chown system system /sys/kernel/oplus_display/oplus_notify_fppress
-    chmod 0666 /sys/kernel/oplus_display/oplus_notify_fppress
+    chown system system /sys/kernel/oplus_display/notify_fppress
+    chmod 0666 /sys/kernel/oplus_display/notify_fppress
     chown system system /sys/kernel/oplus_display/oplus_brightness
     chmod 0666 /sys/kernel/oplus_display/oplus_brightness
     chown system system /sys/kernel/oplus_display/oplus_max_brightness
     chmod 0666 /sys/kernel/oplus_display/oplus_max_brightness
-    chown system system /sys/kernel/oplus_display/max_brightness
-    chmod 0666 /sys/kernel/oplus_display/max_brightness
     chown system system /sys/kernel/oplus_display/aod_light_mode_set
     chmod 0666 /sys/kernel/oplus_display/aod_light_mode_set
     chown system system /sys/kernel/oplus_display/dim_alpha
     chmod 0666 /sys/kernel/oplus_display/dim_alpha
-    chown system system /sys/kernel/oplus_display/esd_status
-    chmod 0666 /sys/kernel/oplus_display/esd_status
-    chown system system /sys/kernel/oplus_display/seed
-    chmod 0666 /sys/kernel/oplus_display/seed
     chown system system /sys/kernel/oplus_display/dimlayer_bl_en
     chmod 0666 /sys/kernel/oplus_display/dimlayer_bl_en
     chown system system /sys/kernel/oplus_display/dim_dc_alpha
     chmod 0666 /sys/kernel/oplus_display/dim_dc_alpha
-    # Add for osc hopping
-    chown system system /sys/kernel/oplus_display/osc
-    chmod 0666 /sys/kernel/oplus_display/osc
-    chown system system /sys/kernel/oplus_display/mipi_hopping
-    chmod 0666 /sys/kernel/oplus_display/mipi_hopping
-    chown system system /sys/kernel/oplus_display/panel_pwr
-    chmod 0666 /sys/kernel/oplus_display/panel_pwr
-    chown system system /sys/kernel/oplus_display/panel_serial_number
-    chmod 0666 /sys/kernel/oplus_display/panel_serial_number
-    chown system system /sys/kernel/oplus_display/esd
-    chmod 0666 /sys/kernel/oplus_display/esd
     chmod 0666 /dev/oplus_display
+    chown system system /sys/kernel/oplus_display/seed
+    chmod 0666 /sys/kernel/oplus_display/seed
 
+    # Input
     chown system /sys/class/input/input1/enable
     chown system /sys/class/input/input1/delay
     chown system /sys/class/input/input1/wake
@@ -517,18 +389,7 @@ on post-fs-data
     chmod 0660 /dev/mtkfb_vsync
     chown system graphics /dev/mtkfb_vsync
 
-    chmod 0660 /dev/sw_sync
-    chown system graphics /dev/sw_sync
-
-    # EM baseband file
-    chown root diag /vendor/bin/baseband_regdump
-    chmod 4750 /vendor/bin/baseband_regdump
-
-     # Boot mode
-    chmod 0664 /sys/class/BOOT/BOOT/boot/boot_mode
-    chown system system /sys/class/BOOT/BOOT/boot/boot_mode
-
-    #pmu
+    # PMU
     chown root radio /sys/devices/platform/mt-pmic/pmic_access_bank0
     chown root radio /sys/devices/platform/mt-pmic/pmic_access_bank1
     chown root radio /sys/devices/platform/mt6311-user/mt6311_access
@@ -548,9 +409,6 @@ on post-fs-data
     chmod 0664 /proc/cpu_ss/cpu_ss_period
     chmod 0664 /proc/cpu_ss/cpu_ss_period_mode
 
-    #EM eint
-    chown root diag /sys/bus/platform/drivers/eint/current_eint
-
     # Android SEC related device nodes
     chmod 0660 /dev/sec
     chown root system /dev/sec
@@ -558,8 +416,6 @@ on post-fs-data
     # FM Radio device node
     chmod 0660 /dev/fm
     chown media media /dev/fm
-
-    # device apc settings
 
     # device info /proc interface
     chmod 0440 /dev/devmap
@@ -583,7 +439,7 @@ on post-fs-data
     chmod 0664 /dev/hdmitx
 
     # JPEG
-    chmod 0666 /proc/mtk_jpeg
+    #chmod 0444 /dev/mtk_jpeg
 
     # almk
     chmod 0440 /dev/mtk_almk
@@ -591,15 +447,15 @@ on post-fs-data
     # DISP
     chmod 0444 /dev/mtk_disp
 
-    #ANC SERVICE
+    # ANC SERVICE
     chmod 0640 /dev/ancservice
     chown media media /dev/ancservice
 
     # gz device
     chmod 0660 /dev/gz_kree
-    chown system system /dev/gz_kree
+    chown system camera /dev/gz_kree
 
-    #Camera
+    # Camera
     chmod 0660 /dev/camera-sysram
     chmod 0660 /dev/camera-isp
     chmod 0660 /dev/camera-dip
@@ -610,7 +466,6 @@ on post-fs-data
     chmod 0660 /dev/camera-owe
     chmod 0660 /dev/camera-fdvt
     chmod 0660 /dev/camera-wpe
-    chmod 0660 /dev/camera-pda
     chmod 0660 /dev/camera-pipemgr
     chmod 0660 /dev/kd_camera_hw
     chmod 0660 /dev/seninf
@@ -620,10 +475,8 @@ on post-fs-data
     chmod 0660 /dev/CAM_CAL_DRV
     chmod 0660 /dev/MAINAF
     chmod 0660 /dev/MAIN2AF
-    chmod 0660 /dev/MAIN3AF
     chmod 0660 /dev/SUBAF
     chmod 0660 /dev/vpu
-    chmod 0660 /dev/apusys
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -635,7 +488,6 @@ on post-fs-data
     chown system camera /dev/camera-tsf
     chown system camera /dev/camera-fdvt
     chown system camera /dev/camera-wpe
-    chown system camera /dev/camera-pda
     chown system camera /dev/camera-pipemgr
     chown system camera /dev/kd_camera_hw
     chown system camera /dev/seninf
@@ -645,20 +497,18 @@ on post-fs-data
     chown system camera /dev/CAM_CAL_DRV
     chown system camera /dev/MAINAF
     chown system camera /dev/MAIN2AF
-    chown system camera /dev/MAIN3AF
     chown system camera /dev/SUBAF
     chown system camera /dev/vpu
-    chown system camera /dev/apusys
 
-    #CCU
+    # CCU
     chmod 0660 /dev/ccu
     chown system camera /dev/ccu
 
-    #VOW
+    # VOW
     chmod 0640 /dev/vow
     chown media media /dev/vow
 
-    #MATV
+    # MATV
     chmod 0660 /dev/MATV
     chown system media /dev/MATV
 
@@ -682,7 +532,7 @@ on post-fs-data
     chmod 0660 /dev/mtk_dfrc
     chown system graphics /dev/mtk_dfrc
 
-    #change partition permission
+    # Change partition permission
     chmod 0640 /mtd@sec_ro
     chown root system /mtd@sec_ro
 
@@ -710,10 +560,6 @@ on post-fs-data
     chmod 0664 /sys/bus/platform/drivers/emi_ctrl/concurrency_scenario
     chown media media /sys/bus/platform/drivers/emi_ctrl/concurrency_scenario
 
-    #mtk_sched
-    chmod 0660 /dev/mtk_sched
-    chown system media /dev/mtk_sched
-
     #BT SCO CVSD, for MT6572 and MT6582 CVSD codec on AP
     chmod 0660 /dev/ebc
     chown media media /dev/ebc
@@ -724,25 +570,28 @@ on post-fs-data
 
     chmod 0666 /dev/uio0
 
-    #otp
+    # OTP
     chmod 0660 /proc/driver/otp
     chown root system /proc/driver/otp
 
     # secure memory
     chown system system /proc/secmem0
 
+    # EXM
     chmod 0666 /dev/exm0
 
     # Thermal
     mkdir /data/vendor/.tp/ 0775 system system
 
-    #MCUPM log
-    chmod 0620 /sys/class/misc/mcupm/mcupm_mobile_log
-    chown root system /sys/class/misc/mcupm/mcupm_mobile_log
-    chmod 0440 /dev/mcupm
-    chown root system /dev/mcupm
+    # Power manager
+    write /sys/power/pm_async 0
+    write /sys/power/pm_freeze_timeout 2000
 
-    #EM of MT6360
+    # RTC
+    chmod 660 /dev/alarm
+    chown root system /dev/alarm
+
+    # EM of MT6360
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_pmu.5-0034/data
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_pmic.5-001a/data
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_ldo.5-0064/data
@@ -752,37 +601,33 @@ on post-fs-data
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_ldo.5-0064/reg_addr
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360-4e/reg_addr
 
-    #EM of MT6362
-    chmod 0664 sys/kernel/debug/ext_dev_io/MT6362.0-09/data
-    chmod 0664 sys/kernel/debug/ext_dev_io/MT6362.0-09/reg
-    chmod 0664 sys/kernel/debug/ext_dev_io/MT6362.0-09/size
-
-on early-boot
-    verity_update_state
-
 on boot
     write /proc/sys/vm/dirty_writeback_centisecs 300
     chmod 0660 /sys/power/autosleep
 
+    # Oplus Display
+    chown system system /sys/kernel/oplus_display/dump_info
+    chown system system /sys/kernel/oplus_display/LCM_CABC
+    chown system system /sys/kernel/oplus_display/ffl_set
+    chown system system /sys/kernel/oplus_display/power_status
+    chown system system /sys/kernel/oplus_display/sau_closebl_node
+    chown system system /sys/kernel/oplus_display/esd_status
+    chmod 0666 /sys/kernel/oplus_display/dump_info
+    chmod 0666 /sys/kernel/oplus_display/LCM_CABC
+    chmod 0666 /sys/kernel/oplus_display/ffl_set
+    chmod 0666 /sys/kernel/oplus_display/power_status
+    chmod 0666 /sys/kernel/oplus_display/sau_closebl_node
+    chmod 0666 /sys/kernel/oplus_display/esd_status
+
+    # LEDS
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
-
-    chown system system /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
-    chmod 0660 /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
-    chown system system /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-    chmod 0660 /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-    chown system system /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
-    chmod 0660 /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
-    chown root   system /sys/kernel/debug/binder/transaction_log_enable
-    chown root   system /sys/kernel/debug/binder/perf_evalue
-    chown system system /sys/devices/system/cpu/rq-stats/htasks_thresh
-    chmod 0660 /sys/devices/system/cpu/rq-stats/htasks_thresh
-    chown system system /sys/devices/system/cpu/rq-stats/avg_htasks_thresh
-    chmod 0660 /sys/devices/system/cpu/rq-stats/avg_htasks_thresh
-
-    chown system /sys/module/mlog/parameters/do_mlog
-    chown system /sys/module/mlog/parameters/timer_intval
-
+    chmod 0664 /sys/class/leds/red/brightness
+    chown system system /sys/class/leds/red/brightness
+    chmod 0664 /sys/class/leds/green/brightness
+    chown system system /sys/class/leds/green/brightness
+    chmod 0664 /sys/class/leds/blue/brightness
+    chown system system /sys/class/leds/blue/brightness
     chown root   radio  /sys/class/leds/lcd-backlight/duty
     chown root   radio  /sys/class/leds/lcd-backlight/div
     chown system system /sys/class/leds/lcd-backlight/trigger
@@ -792,6 +637,22 @@ on boot
     chown system system /sys/class/leds/red/trigger
     chown system system /sys/class/leds/green/trigger
     chown system system /sys/class/leds/blue/trigger
+
+    # CPUFreq
+    chown system system /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
+    chmod 0660 /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
+    chown system system /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+    chmod 0660 /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+    chown system system /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
+    chmod 0660 /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
+    chown system system /sys/devices/system/cpu/rq-stats/htasks_thresh
+    chmod 0660 /sys/devices/system/cpu/rq-stats/htasks_thresh
+    chown system system /sys/devices/system/cpu/rq-stats/avg_htasks_thresh
+    chmod 0660 /sys/devices/system/cpu/rq-stats/avg_htasks_thresh
+
+    # MLOG
+    chown system /sys/module/mlog/parameters/do_mlog
+    chown system /sys/module/mlog/parameters/timer_intval
 
     # Permission for hibernation
     chown radio system /sys/power/tuxonice
@@ -927,7 +788,7 @@ on boot
     chown shell system /proc/driver/wmt_dbg
     chown shell system /proc/driver/wmt_aee
 
-    # Define device for EMCSMDLOGGER
+    # define device for EMCSMDLOGGER
     chown system radio /dev/ttyGS3
     chmod 0660 /dev/ttyGS3
 
@@ -937,34 +798,20 @@ on boot
     chmod 660 /dev/ttyGS1
     chown system radio /dev/ttyGS1
 
-    # Power Manager
-    write /sys/power/pm_freeze_timeout 2000
-
 on property:vold.decrypt=trigger_reset_main
     setprop sys.boot_completed 0
     setprop dev.bootcomplete 0
 
 on property:vold.decrypt=trigger_restart_min_framework
-    start msensord
-    start permission_check
+    start nvram_daemon
 
 on property:vold.decrypt=trigger_restart_framework
-    start msensord
-    start permission_check
+    start nvram_daemon
 
 on property:vold.decrypt=trigger_shutdown_framework
     setprop sys.boot_completed 0
     setprop dev.bootcomplete 0
 
-# bugreport is triggered by holding down volume down, volume up and power
-service bugreport /system/bin/dumpstate -d -p -B -z \
-        -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
-    class late_start
-    disabled
-    oneshot
-    keycodes 114 115 116
-
-# end boot time fs tune
 on property:sys.boot_completed=1
     write /sys/block/mmcblk0/queue/iostats 1
     write /sys/block/mmcblk0/queue/read_ahead_kb 512
@@ -978,59 +825,47 @@ on property:sys.boot_completed=1
     write /sys/block/dm-3/queue/read_ahead_kb 128
     write /sys/block/dm-4/queue/read_ahead_kb 128
     write /sys/block/dm-5/queue/read_ahead_kb 128
-    
-# FastCharge 
-    write /sys/class/oplus_chg/battery/fast_charge 1
+	
+	write /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp -1
+
+    write /sys/devices/virtual/oplus_chg/usb/otg_switch 1
 
 # Battery info
 on property:persist.vendor.mediatek.fg.disable=1
     write /sys/devices/platform/battery_meter/FG_daemon_disable 1
     write /sys/bus/platform/devices/battery/FG_daemon_disable 1
-    write /sys/bus/platform/devices/battery_bq/FG_daemon_disable 1
 
 on property:persist.vendor.mediatek.fg.force25c=1
     write /sys/devices/platform/battery_meter/FG_drv_force25c 1
     write /sys/bus/platform/devices/battery/Battery_Temperature 25
-    write /sys/bus/platform/devices/battery_bq/FG_tempfunction_disable 1
 
 on property:persist.vendor.mediatek.fg.force25c=0
     write /sys/devices/platform/battery_meter/FG_drv_force25c 0
     write /sys/bus/platform/devices/battery/Battery_Temperature 65535
-    write /sys/bus/platform/devices/battery_bq/FG_tempfunction_enable 1
 
-# add meta_tst for ATM
-service meta_tst /vendor/bin/meta_tst
-    class core
-    user root
-    group radio gps system wifi audio bluetooth media
-    capabilities NET_RAW NET_ADMIN
-    socket meta-atci stream 660 radio system
-    disabled
-    oneshot
-
-# start meta_tst for ATM
-on property:sys.boot_completed=1 && property:ro.boot.atm=enable
-    start meta_tst
+on property:persist.vendor.mediatek.fg.log.enable=1
+    write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
+    write /sys/bus/platform/devices/battery/FG_daemon_log_level 7
+    write /proc/sys/kernel/printk 8
 
 # reset mdmode when modem crash happens in ATM
 on property:vendor.mtk.md1.status=reset
     setprop persist.vendor.atm.mdmode normal
 
-# MTK fast charging support
-on property:persist.vendor.mediatek.fast_charging.support=*
-    write /sys/devices/platform/charger/fast_chg_indicator ${persist.vendor.mediatek.fast_charging.support}
+on property:ro.boot.product.vendor.sku=nfc
+    start vendor.nfc_hal_service
+    start mtk_secure_element_hal_service
 
-# FPSGO FBT Game
-on boot
-    insmod /vendor/lib/modules/fpsgo.ko
+service vendor.nfc_hal_service /vendor/bin/hw/android.hardware.nfc@1.2-service
+    override
+    disabled
+    class hal
+    user nfc
+    group nfc
 
-service fuelgauged /vendor/bin/fuelgauged
-    class core
-    user system
-    group system
-
-service fuelgauged_nvram /vendor/bin/fuelgauged_nvram
-    class main
-    user system
-    group system
-    oneshot
+service mtk_secure_element_hal_service /vendor/bin/hw/android.hardware.secure_element@1.2-service-mediatek
+    override
+    disabled
+    class hal
+    user secure_element
+    group secure_element

@@ -255,7 +255,6 @@ PRODUCT_PACKAGES += \
 
 # NFC
 PRODUCT_PACKAGES += \
-    android.hardware.nfc_snxxx@1.2-service \
     android.hardware.nfc@1.2-service \
     com.android.nfc_extras \
     NfcNci \
@@ -388,19 +387,20 @@ PRODUCT_PACKAGES += \
 
 # Rootdir
 PRODUCT_PACKAGES += \
-    fstab.mt6877.ramdisk \
     fstab.mt6877 \
-    init.connectivity.common.rc \
+    fstab.mt6877_ramdisk \
+    init.cgroup.rc \
     init.connectivity.rc \
-    init_connectivity.rc \
     init.modem.rc \
     init.mt6877.rc \
     init.mt6877.usb.rc \
+    init.nfc_detect.rc \
     init.project.rc \
-    init.sensor_2_0.rc \
+    init.sensor_1_0.rc \
     init.target.rc \
     ueventd.mtk.rc \
     ueventd.oplus.rc \
+    nfc_detect.sh
 
 # Fastboot
 PRODUCT_PACKAGES += \
@@ -460,9 +460,7 @@ PRODUCT_PACKAGES += \
 
 # VNDK
 PRODUCT_PACKAGES += \
-    libutils-v32 \
-    libcrypto-v32 \
-    libmedia_helper-v30
+    libutils-v32
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
