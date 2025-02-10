@@ -474,7 +474,7 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service-lazy \
     wpa_supplicant \
     hostapd \
-    libwifi-hal-mt66xx
+    libwifi-hal-wrapper
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
