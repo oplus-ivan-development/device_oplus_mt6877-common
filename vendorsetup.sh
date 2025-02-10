@@ -10,9 +10,6 @@ git clone https://github.com/oplus-ivan-development/android_device_oplus_ivan.gi
 git clone https://github.com/oplus-ivan-development/android_vendor_oplus_ivan.git vendor/oplus/ivan
 
 # Hardware
-git clone -b lineage-20 https://github.com/LineageOS/android_hardware_oplus.git hardware/oplus
-git clone -b lineage-20 https://github.com/LineageOS/android_hardware_mediatek.git hardware/mediatek
-git clone -b lineage-20 https://github.com/LineageOS/android_device_mediatek_sepolicy_vndr.git device/mediatek/sepolicy_vndr
-
-# wlan
-git clonehttps://github.com/nashc-dev/android_hardware_mediatek_wlan.git -b lineage-20 hardware/mediatek/wlan
+git clone -b lineage-22.1 https://github.com/LineageOS/android_hardware_oplus.git hardware/oplus
+git clone -b lineage-22.1 https://github.com/LineageOS/android_hardware_mediatek.git hardware/mediatek
+git clone -b lineage-22.1 https://github.com/LineageOS/android_device_mediatek_sepolicy_vndr.git device/mediatek/sepolicy_vndr
