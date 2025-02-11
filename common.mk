@@ -65,6 +65,10 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/aurisys/aurisys_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/aurisys_config/aurisys_config.xml \
+    $(LOCAL_PATH)/configs/aurisys/aurisys_config_hifi3.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/aurisys_config_hifi3/aurisys_config_hifi3.xml
+
 # Biometrics
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.oplus
@@ -255,7 +259,6 @@ PRODUCT_PACKAGES += \
 
 # NFC
 PRODUCT_PACKAGES += \
-    android.hardware.nfc_snxxx@1.2-service \
     android.hardware.nfc@1.2-service \
     com.android.nfc_extras \
     NfcNci \
