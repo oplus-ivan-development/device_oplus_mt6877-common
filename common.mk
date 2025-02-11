@@ -394,6 +394,7 @@ PRODUCT_PACKAGES += \
     fstab.mt6877.ramdisk \
     fstab.mt6877 \
     init.connectivity.common.rc \
+    init.oplus.rc \
     init.connectivity.rc \
     init_connectivity.rc \
     init.modem.rc \
