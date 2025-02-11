@@ -206,6 +206,8 @@ on post-fs
 
     # allow ccci_mdinit access ccci_dump
     chown root system /proc/ccci_dump
+     on property:sys.boot_completed=1
+	write /sys/devices/virtual/oplus_chg/usb/otg_switch 1
 
 on post-fs-data
     write /proc/bootprof "INIT:post-fs-data"
