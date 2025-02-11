@@ -176,6 +176,9 @@ persist.vendor.mims_support=2
 ro.vendor.md_mims_support=2
 persist.vendor.factory.GB2312=yes
 
+# Power HAL
+vendor.powerhal.disp.idle_support=false
+
 # Priv-app Permissions
 ro.control_privapp_permissions=enforce
 
