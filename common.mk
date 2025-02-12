@@ -172,9 +172,6 @@ PRODUCT_PACKAGES += \
     android.hardware.gnss@2.1.vendor:64 \
     libcurl.vendor
 
-PRODUCT_PACKAGES += \
-    android.hardware.gnss-service.mediatek
-
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.safe_union@1.0.vendor \
@@ -344,7 +341,7 @@ PRODUCT_COPY_FILES += \
 
 # Public Libraries
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/publiclibraries/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
+    $(COMMON_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
 
 # Power
 PRODUCT_PACKAGES += \
@@ -418,7 +415,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml \
-    $(LOCAL_PATH)/configs/permissions/privapp-permissions-xhotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-xhotword.xml \
     $(LOCAL_PATH)/configs/permissions/com.android.hotwordenrollment.common.util.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/com.android.hotwordenrollment.common.util.xml
 
 # Sensors
@@ -444,6 +440,7 @@ PRODUCT_PACKAGES += \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
+    hardware/oplus \
     hardware/google/interfaces \
     hardware/google/pixel \
     hardware/mediatek \
@@ -463,13 +460,13 @@ PRODUCT_BOOT_JARS += \
 
 # Thermal
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.mtk \
     android.hardware.thermal@2.0.vendor \
     android.hardware.thermal@1.0-impl
 
 # USB
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.3-service-mediatekv2
+    android.hardware.usb@1.3.vendor \
+    android.hardware.usb.gadget@1.1.vendor
 
 # Vibrator
 PRODUCT_PACKAGES += \
