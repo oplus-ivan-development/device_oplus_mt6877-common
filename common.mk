@@ -509,5 +509,14 @@ PRODUCT_PACKAGES += \
     libutilscallstack.vendor \
     libdumpstateutil.vendor
 
+# libshims
+PRODUCT_PACKAGES += \
+    libjni_shim \
+    libsensors_shim
+
+PRODUCT_PACKAGES += \
+    libshim_ui \
+    libshim
+
 # Inherit from vendor blobs
 $(call inherit-product, vendor/oneplus/mt6877-common/mt6877-common-vendor.mk)
