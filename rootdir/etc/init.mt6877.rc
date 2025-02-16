@@ -48,6 +48,11 @@ on property:sys.boot_completed=1 && property:sys.oplus.bootupgrade=1
     write /dev/kmsg "first boot completed, sys.oplus.bootupgrade = 1. free cpufreq limit."
     write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "-1 -1 -1 -1"
 
+# Logger
+    start boot_log
+    start boot_log_crash
+    start boot_log_kernel
+
 on late-init
     write /proc/bootprof "INIT:late-init"
 # enable rcu_expedited
@@ -191,6 +196,11 @@ on post-fs
     symlink /dev/block/mapper/pl_a /dev/block/platform/bootdevice/by-name/preloader_raw_a
     symlink /dev/block/mapper/pl_b /dev/block/platform/bootdevice/by-name/preloader_raw_b
 
+    # Logger
+    start boot_log
+    start boot_log_crash
+    start boot_log_kernel
+
 # change owner
     chown system system /proc/bootprof
     chmod 0664 /proc/bootprof
@@ -304,6 +314,12 @@ on post-fs-data
 
 # -----------------------
 # Add by MTK
+
+ # Logger
+    start boot_log
+    start boot_log_crash
+    start boot_log_kernel
+
     # SCP log
     chmod 0660 /sys/class/misc/scp/scp_mobile_log
     chown root system /sys/class/misc/scp/scp_mobile_log
@@ -1092,3 +1108,32 @@ service fuelgauged_nvram /vendor/bin/fuelgauged_nvram
     group system
     oneshot
 #endif
+
+# Logger
+service boot_log /system/bin/logcat -b all -D -f /metadata/boot_log_full.txt
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+service boot_log_crash /system/bin/logcat -b crash -D -f /metadata/boot_log_crash.txt
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+service boot_log_kernel /system/bin/logcat -b kernel -D -f /metadata/boot_log_kernel.txt
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+on post-fs-data
+    # Clear existing log and start the service
+    rm /metadata/boot_log.txt
+    start boot_log
+on property:sys.boot_completed=1
+# Stop the logger service
+    stop boot_log
+    stop boot_log_crash
+    stop boot_log_kernel
