@@ -51,7 +51,7 @@ cc_binary {
 }
 
 cc_binary { 
-	name: "als_correction_service.mt6893",
+	name: "als_correction_service.mt6877",
 	stem: "als_correction_service", 
 	init_rc: ["als_correction_service.rc"], 
 	system_ext_specific: true, 

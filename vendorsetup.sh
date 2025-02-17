@@ -20,3 +20,7 @@ git clone --depth=1 https://github.com/Notganesh/android_prebuilts_clang_host_li
 
 # wlan
 git clone https://github.com/mt6893-development/android_hardware_mediatek_wlan.git -b lineage-21 hardware/mediatek/wlan
+
+
+# Source patches
+bash device/oplus/mt6877-common/patches/apply.sh

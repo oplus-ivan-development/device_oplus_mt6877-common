@@ -520,8 +520,7 @@ PRODUCT_BOOT_JARS += \
     mediatek-framework \
     mediatek-ims-base \
     mediatek-ims-common \
-    mediatek-services \
-    oplus-support-wrapper
+    mediatek-services
 
 # Thermal
 PRODUCT_PACKAGES += \
@@ -540,6 +539,7 @@ PRODUCT_PACKAGES += \
 # Vibrator
 PRODUCT_PACKAGES += \
     android.hardware.vibrator-service.mt6877
+
 # Viper4Android
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/prebuilt/viper/lib/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
