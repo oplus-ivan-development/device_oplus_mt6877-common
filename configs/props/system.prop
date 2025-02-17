@@ -1,25 +1,17 @@
+# AEE
+ro.vendor.have_aee_feature=1
+
+# Kernel
+ro.kernel.zio=38,108,105,16
+
 # Audio
-ro.camera.sound.forced=0
 ro.audio.silent=0
 ro.audio.usb.period_us=16000
-ro.config.vc_call_vol_steps=15
-
-# Camera
-vendor.camera.aux.packagelist=com.android.camera,org.lineageos.aperture,org.lineageos.aperture.dev
+ro.camera.sound.forced=0
+ro.config.vc_call_vol_steps=7
 
 # Brand
 Build.BRAND=MTK
-
-# CA 
-persist.sys.radio.force_lte_ca=true
-
-# Connectivity
-vendor.rild.libpath=mtk-ril.so
-vendor.rild.libargs=-d /dev/ttyC0
-wifi.interface=wlan0
-ro.mediatek.wlan.wsc=1
-ro.mediatek.wlan.p2p=1
-mediatek.wlan.ctia=0
 
 # Dalvik
 dalvik.vm.ps-min-first-save-ms=150000
@@ -57,35 +49,11 @@ pm.dexopt.shared=speed
 
 # Display
 ro.opengles.version=196610 
-debug.sf.use_phase_offsets_as_durations=1
-debug.sf.late.sf.duration=27600000
-debug.sf.late.app.duration=20000000
-debug.sf.early.sf.duration=27600000
-debug.sf.early.app.duration=20000000
-debug.sf.earlyGl.sf.duration=27600000
-debug.sf.earlyGl.app.duration=20000000
-debug.sf.hwc.min.duration=23000000
-debug.sf.predict_hwc_composition_strategy=0
-debug.sf.enable_transaction_tracing=false
-
-# Media
-ro.vendor.mtk_flv_playback_support=1
-media.stagefright.thumbnail.prefer_hw_codecs=true
-vendor.mtk_thumbnail_optimization=true
 
 # IMS
-persist.dbg.volte_avail_ovr=1
+persist.dbg.volte_avail_ovr=1 
 persist.dbg.vt_avail_ovr=1
 persist.dbg.wfc_avail_ovr=1
-
-# USB
-ro.sys.usb.mtp.whql.enable=0
-ro.sys.usb.storage.type=mtp
-ro.sys.usb.charging.only=yes
-ro.sys.usb.bicr=no
-
-# Storage
-persist.sys.fuse.passthrough.enable=true
 
 # IPO
 sys.ipo.pwrdncap=2
@@ -94,8 +62,10 @@ sys.ipo.disable=1
 # iorapd
 ro.iorapd.enable=false
 
-# Kernel
-ro.kernel.zio=38,108,105,16
+# Media
+ro.vendor.mtk_flv_playback_support=1
+media.stagefright.thumbnail.prefer_hw_codecs=true
+vendor.mtk_thumbnail_optimization=true
 
 # Memory
 ro.config.per_app_memcg=false
@@ -111,12 +81,8 @@ ro.mediatek.version.build.branch=
 ro.vendor.mtk_omacp_support=1
 ro.vendor.mtk_cta_set=1
 ro.vendor.qti.va_aosp.support=0
-debug.stagefright.c2inputsurface=-1
 debug.atrace.tags.enableflags=0
 persist.traced.enable=1
-ro.support_one_handed_mode=true
-ro.vendor.mtk_gwsd_support=1
-persist.vendor.pms_removable=1
 persist.vendor.vzw_device_type=0
 ro.vendor.customer_logpath=/data
 persist.vendor.mdlog.flush_log_ratio=0
@@ -136,6 +102,8 @@ vendor.rild.libpath=mtk-ril.so
 vendor.rild.libargs=-d /dev/ttyC0
 ro.vendor.mtk_telephony_add_on_policy=0
 ro.telephony.sim.count=2
+persist.radio.multisim.config=dsds
+persist.radio.hvolte.enable=1
 
 # Storage
 persist.sys.fuse.passthrough.enable=true
@@ -145,17 +113,29 @@ ro.sys.usb.mtp.whql.enable=0
 ro.sys.usb.storage.type=mtp
 ro.sys.usb.bicr=no
 ro.sys.usb.charging.only=yes
-qemu.hw.mainkeys=0
 
 # WiFi
-wifi.direct.interface=p2p0
 wifi.interface=wlan0
+wifi.tethering.interface=ap0
+wifi.direct.interface=p2p0
 ro.mediatek.wlan.wsc=1
 ro.mediatek.wlan.p2p=1
 mediatek.wlan.ctia=0
-wifi.tethering.interface=ap0
 persist.vendor.wfc.sys_wfc_support=1
 
 # Zygote
 ro.zygote.preload.enable=0
-zygote.critical_window.minute=10
+
+# Radio VoNR Calling
+persist.radio.is_vonr_enabled_0=true
+persist.radio.is_vonr_enabled_1=true
+persist.vendor.vonr_setting_support=1
+
+#ADB
+persist.service.adb.enable=1                                                    
+persist.service.debuggable=1
+
+#Camera
+persist.camera.HAL3.enabled=1
+persist.camera.eis.enabled=1
+ro.camera.sound.forced=0

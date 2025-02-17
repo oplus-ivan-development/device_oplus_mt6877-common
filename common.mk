@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2025 The LineageOS Project
+# Copyright (C) 2020 Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,13 @@ COMMON_PATH := device/oplus/mt6877-common
 # Installs gsi keys into ramdisk, to boot a GSI with verified boot.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
+# Dalvik
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
+
 PRODUCT_SHIPPING_API_LEVEL := 30
 
 # Vendor Log Tag
-include $(LOCAL_PATH)/vendor_logtag.mk
+include $(COMMON_PATH)/configs/props/logtag.mk
 
 # Dynamic Partition
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
@@ -34,17 +37,16 @@ TARGET_SCREEN_WIDTH := 1080
 PRODUCT_AAPT_CONFIG := xxxhdpi
 PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
 
-# Updater
-AB_OTA_UPDATER := false
-
-# Doze
+# Device-specific background service
 PRODUCT_PACKAGES += \
-    OplusDoze
+    OssiDeviceService
+
+# Always use GPU for screen compositing
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.sf.disable_hwc_overlays=1
 
 # Always use scudo for memory allocator
 PRODUCT_USE_SCUDO := true
-PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
-PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-image-profile.txt
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -70,6 +72,7 @@ PRODUCT_PACKAGES += \
     libtinycompress \
     libdynproc \
     libhapticgenerator \
+    libstagefright_foundation \
     libaudiospdif
 
 # Audio
@@ -90,22 +93,29 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0.vendor:64 \
-    android.hardware.bluetooth@1.1.vendor:64 \
+    android.hardware.bluetooth@1.0.vendor \
+    android.hardware.bluetooth@1.1.vendor \
     android.hardware.bluetooth.audio-impl
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/libshims/libldacBT_bco:$(TARGET_COPY_OUT_VENDOR)/lib/libldacBT_bco.so \
+    $(LOCAL_PATH)/libshims/libldacBT_bco:$(TARGET_COPY_OUT_VENDOR)/lib64/libldacBT_bco.so
+
 # Camera
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/camera/oplus_camera_config:$(TARGET_COPY_OUT_ODM)/etc/camera/config/oplus_camera_config
+
 PRODUCT_PACKAGES += \
-    android.hardware.camera.common@1.0.vendor:64 \
-    android.hardware.camera.device@3.2.vendor:64 \
-    android.hardware.camera.device@1.0.vendor:64 \
-    android.hardware.camera.device@3.3.vendor:64 \
-    android.hardware.camera.device@3.4.vendor:64 \
-    android.hardware.camera.device@3.5.vendor:64 \
-    android.hardware.camera.device@3.6.vendor:64 \
-    android.hardware.camera.provider@2.4.vendor:64 \
-    android.hardware.camera.provider@2.5.vendor:64 \
-    android.hardware.camera.provider@2.6.vendor:64 \
+    android.hardware.camera.common@1.0.vendor \
+    android.hardware.camera.device@3.2.vendor \
+    android.hardware.camera.device@1.0.vendor \
+    android.hardware.camera.device@3.3.vendor \
+    android.hardware.camera.device@3.4.vendor \
+    android.hardware.camera.device@3.5.vendor \
+    android.hardware.camera.device@3.6.vendor \
+    android.hardware.camera.provider@2.4.vendor \
+    android.hardware.camera.provider@2.5.vendor \
+    android.hardware.camera.provider@2.6.vendor \
     libcamera2ndk_vendor \
     libexif.vendor \
     libexpat.vendor \
@@ -114,15 +124,25 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libcamera_metadata_shim
 
+# Dex/ART optimization
+PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
+PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := everything
+PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
+USE_DEX2OAT_DEBUG := false
+DONT_DEXPREOPT_PREBUILTS := true
+# Enable whole-program R8 Java optimizations for SystemUI and system_server
+SYSTEM_OPTIMIZE_JAVA := true
+SYSTEMUI_OPTIMIZE_JAVA := true
+
 # Display
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.allocator@2.0.vendor:64 \
-    android.hardware.graphics.allocator@3.0.vendor:64 \
-    android.hardware.graphics.allocator@4.0.vendor:64 \
-    android.hardware.graphics.composer@2.1-resources.vendor:64 \
-    android.hardware.graphics.composer@2.2-resources.vendor:64 \
+    android.hardware.graphics.allocator@2.0.vendor \
+    android.hardware.graphics.allocator@3.0.vendor \
+    android.hardware.graphics.allocator@4.0.vendor \
+    android.hardware.graphics.composer@2.1-resources.vendor \
+    android.hardware.graphics.composer@2.2-resources.vendor \
     android.hardware.graphics.composer@2.3-service \
-    android.hidl.allocator@1.0.vendor:64 \
+    android.hidl.allocator@1.0.vendor \
     android.hardware.memtrack-service.mediatek-mali \
     android.hardware.graphics.common-V2-ndk_platform.vendor \
     android.hardware.graphics.common-V2-ndk.vendor \
@@ -131,14 +151,18 @@ PRODUCT_PACKAGES += \
     libion.vendor \
     libui.vendor
 
+# Display saturation adjust
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.sys.sf.color_saturation?=1.37
+
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey \
-    android.hardware.drm@1.0.vendor:64 \
-    android.hardware.drm@1.1.vendor:64 \
-    android.hardware.drm@1.2.vendor:64 \
-    android.hardware.drm@1.3.vendor:64 \
-    android.hardware.drm@1.4.vendor:64 \
+    android.hardware.drm@1.0.vendor \
+    android.hardware.drm@1.1.vendor \
+    android.hardware.drm@1.2.vendor \
+    android.hardware.drm@1.3.vendor \
+    android.hardware.drm@1.4.vendor \
     libmockdrmcryptoplugin \
     libdrm.vendor \
     libdrm
@@ -166,11 +190,14 @@ PRODUCT_PACKAGES += \
     android.hardware.gnss.measurement_corrections@1.0.vendor \
     android.hardware.gnss.measurement_corrections@1.1.vendor \
     android.hardware.gnss.visibility_control@1.0.vendor \
-    android.hardware.gnss@1.0.vendor:64 \
-    android.hardware.gnss@1.1.vendor:64 \
-    android.hardware.gnss@2.0.vendor:64 \
-    android.hardware.gnss@2.1.vendor:64 \
+    android.hardware.gnss@1.0.vendor \
+    android.hardware.gnss@1.1.vendor \
+    android.hardware.gnss@2.0.vendor \
+    android.hardware.gnss@2.1.vendor \
     libcurl.vendor
+
+PRODUCT_PACKAGES += \
+    android.hardware.gnss-service.mediatek
 
 # HIDL
 PRODUCT_PACKAGES += \
@@ -212,26 +239,47 @@ PRODUCT_PACKAGES += \
 
 # OMX
 PRODUCT_PACKAGES += \
+    android.hardware.media.omx@1.0-service \
     android.hardware.media.c2@1.1.vendor \
     android.hardware.media.c2@1.2.vendor \
     libcodec2_hidl@1.0.vendor \
     libcodec2_hidl@1.1.vendor \
     libcodec2_hidl@1.2.vendor \
     libcodec2_vndk.vendor \
+    libcodec2_soft_avcdec \
+    libcodec2_soft_avcenc \
+    libcodec2_soft_h263dec \
+    libcodec2_soft_h263enc \
+    libcodec2_soft_mpeg4dec \
+    libcodec2_soft_mpeg4enc \
+    libcodec2_soft_vp8dec \
+    libcodec2_soft_vp8enc \
+    libcodec2_soft_vp9dec \
+    libcodec2_soft_vp9enc \
+    libcodec2_soft_hevcdec \
+    libcodec2_soft_hevcenc \
     libstagefright_omx.vendor
 
 # Media
 PRODUCT_PACKAGES += \
+    libcodec2_hidl@1.1.vendor \
+    libcodec2_hidl@1.2.vendor \
     libavservices_minijail_vendor \
     libstagefright_softomx_plugin.vendor \
     libsfplugin_ccodec_utils.vendor \
     libcodec2_soft_common.vendor
 
 PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
     $(COMMON_PATH)/configs/media/media_codecs_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml \
+    $(COMMON_PATH)/configs/media/media_codecs_mediatek_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_mediatek_audio.xml \
     $(COMMON_PATH)/configs/media/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
     $(COMMON_PATH)/configs/media/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml \
-    $(COMMON_PATH)/configs/media/mtk_platform_codecs_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mtk_platform_codecs_config.xml
+    $(COMMON_PATH)/configs/media/media_profiles_V1_0.dtd:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.dtd \
+    $(COMMON_PATH)/configs/media/VideoLog_dynamic.xml:$(TARGET_COPY_OUT_VENDOR)/etc/VideoLog_dynamic.xml
+
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/media/mtk_platform_codecs_whitelist.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mtk_platform_codecs_whitelist.xml
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
@@ -247,10 +295,10 @@ PRODUCT_COPY_FILES += \
 
 # Neural Networks
 PRODUCT_PACKAGES += \
-    android.hardware.neuralnetworks@1.0.vendor:64 \
-    android.hardware.neuralnetworks@1.1.vendor:64 \
-    android.hardware.neuralnetworks@1.2.vendor:64 \
-    android.hardware.neuralnetworks@1.3.vendor:64 \
+    android.hardware.neuralnetworks@1.0.vendor \
+    android.hardware.neuralnetworks@1.1.vendor \
+    android.hardware.neuralnetworks@1.2.vendor \
+    android.hardware.neuralnetworks@1.3.vendor \
     libtextclassifier_hash.vendor
 
 # NFC
@@ -290,6 +338,25 @@ PRODUCT_PACKAGES += \
     TetheringConfigOverlay \
     CarrierConfigOverlay
 
+# Oplus Camera
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/permissions/com.oplus.camera.unit.sdk_product.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/com.oplus.camera.unit.sdk_product.xml \
+    $(COMMON_PATH)/configs/permissions/oplus_camera_default_grant_permissions_list.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/oplus_camera_default_grant_permissions_list.xml \
+    $(COMMON_PATH)/configs/permissions/APU_SYS.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/APU_SYS.xml \
+    $(COMMON_PATH)/configs/sysconfig/hiddenapi-package-whitelist-oplus-system.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/hiddenapi-package-whitelist-oplus-system.xml
+
+# ORMS
+PRODUCT_PACKAGES += \
+    orms_core_config
+
+# OplusDoze
+PRODUCT_PACKAGES += \
+    OplusDoze
+
+# MTK InCallService
+PRODUCT_PACKAGES += \
+    MtkInCallService
+
 # fastbootd
 PRODUCT_PACKAGES += \
     fastbootd
@@ -297,6 +364,8 @@ PRODUCT_PACKAGES += \
 # Permissions
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/permissions/privapp-permissions-mediatek.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-mediatek.xml \
+    $(COMMON_PATH)/configs/permissions/privapp-permissions-oplus.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-oplus.xml \
+    $(COMMON_PATH)/configs/permissions/privapp-permissions-oplus.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-oplus.xml \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.low_latency.xml \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
@@ -341,11 +410,10 @@ PRODUCT_COPY_FILES += \
 
 # Public Libraries
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
+    $(COMMON_PATH)/configs/publiclibraries/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
 
 # Power
-PRODUCT_PACKAGES += \
-    android.hardware.power-service.pixel-libperfmgr
+$(call inherit-product, $(COMMON_PATH)/power-libperfmgr/power-libperfmgr.mk)
 
 PRODUCT_PACKAGES += \
     vendor.mediatek.hardware.mtkpower@1.2-service.stub
@@ -356,10 +424,6 @@ PRODUCT_PACKAGES += \
     vendor.mediatek.hardware.mtkpower@1.1.vendor \
     vendor.mediatek.hardware.mtkpower@1.2.vendor
 
-PRODUCT_PACKAGES += \
-    libmtkperf_client_vendor \
-    libmtkperf_client
-
 # Perf
 PRODUCT_COPY_FILES += \
     system/core/libprocessgroup/profiles/cgroups_30.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
@@ -368,23 +432,27 @@ PRODUCT_COPY_FILES += \
 
 # Radio
 PRODUCT_PACKAGES += \
-    android.hardware.radio.config@1.0.vendor:64 \
-    android.hardware.radio.config@1.1.vendor:64 \
-    android.hardware.radio.config@1.2.vendor:64 \
-    android.hardware.radio.config@1.3.vendor:64 \
-    android.hardware.radio@1.0.vendor:64 \
-    android.hardware.radio@1.1.vendor:64 \
-    android.hardware.radio@1.2.vendor:64 \
-    android.hardware.radio@1.3.vendor:64 \
-    android.hardware.radio@1.4.vendor:64 \
-    android.hardware.radio@1.5.vendor:64 \
-    android.hardware.radio@1.6.vendor:64
+    android.hardware.radio.config@1.0.vendor \
+    android.hardware.radio.config@1.1.vendor \
+    android.hardware.radio.config@1.2.vendor \
+    android.hardware.radio.config@1.3.vendor \
+    android.hardware.radio@1.0.vendor \
+    android.hardware.radio@1.1.vendor \
+    android.hardware.radio@1.2.vendor \
+    android.hardware.radio@1.3.vendor \
+    android.hardware.radio@1.4.vendor \
+    android.hardware.radio@1.5.vendor \
+    android.hardware.radio@1.6.vendor
 
 # RcsService
 PRODUCT_PACKAGES += \
     com.android.ims.rcsmanager \
     RcsService \
     PresencePolling
+
+# ImsInit hack
+PRODUCT_PACKAGES += \
+    ImsInit
 
 # Rootdir
 PRODUCT_PACKAGES += \
@@ -415,6 +483,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml \
+    $(LOCAL_PATH)/configs/permissions/privapp-permissions-xhotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-xhotword.xml \
     $(LOCAL_PATH)/configs/permissions/com.android.hotwordenrollment.common.util.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/com.android.hotwordenrollment.common.util.xml
 
 # Sensors
@@ -434,19 +503,16 @@ PRODUCT_COPY_FILES += \
 
 # Secure Element
 PRODUCT_PACKAGES += \
-    android.hardware.secure_element@1.0.vendor:64 \
-    android.hardware.secure_element@1.1.vendor:64 \
-    android.hardware.secure_element@1.2.vendor:64
+    android.hardware.secure_element@1.0.vendor \
+    android.hardware.secure_element@1.1.vendor \
+    android.hardware.secure_element@1.2.vendor
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    hardware/oplus \
-    hardware/google/interfaces \
-    hardware/google/pixel \
-    hardware/mediatek \
-    hardware/mediatek/libmtkperf_client \
     $(DEVICE_PATH) \
-    $(COMMON_PATH)
+    $(COMMON_PATH) \
+    hardware/mediatek \
+    hardware/oplus
 
 # IMS
 PRODUCT_BOOT_JARS += \
@@ -454,50 +520,61 @@ PRODUCT_BOOT_JARS += \
     mediatek-framework \
     mediatek-ims-base \
     mediatek-ims-common \
-    mediatek-telecom-common \
-    mediatek-telephony-base \
-    mediatek-telephony-common
+    mediatek-services \
+    oplus-support-wrapper
 
 # Thermal
 PRODUCT_PACKAGES += \
+    android.hardware.thermal@2.0-service.mtk \
     android.hardware.thermal@2.0.vendor \
     android.hardware.thermal@1.0-impl
 
+# Touch
+PRODUCT_PACKAGES += \
+    vendor.lineage.touch@1.0-service.oplus
+
 # USB
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.3.vendor \
-    android.hardware.usb.gadget@1.1.vendor
+    android.hardware.usb@1.3-service-mediatekv2
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    android.hardware.vibrator-service.mediatek
+    android.hardware.vibrator-service.mt6877
+# Viper4Android
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/prebuilt/viper/lib/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/prebuilt/viper/lib64/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/prebuilt/viper/etc/audio_effects.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_effects.conf
 
 # VNDK
-PRODUCT_PACKAGES += \
-    libcrypto-v32 \
-    libutils-v31 \
-    libssl-v32 \
-    libbinder_v32 \
-    libhidlbase_v32 \
-    libutils_v32 \
-    libstagefright_foundation_v33
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v32/arm64/arch-arm-armv8-a/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libutils-v32.so \
+    prebuilts/vndk/v33/arm64/arch-arm-armv8-a/shared/vndk-core/libstagefright_foundation.so:$(TARGET_COPY_OUT_VENDOR)/lib/libstagefright_foundation-v33.so \
+    prebuilts/vndk/v32/arm64/arch-arm64-armv8-a/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libutils-v32.so \
+    prebuilts/vndk/v33/arm64/arch-arm64-armv8-a/shared/vndk-core/libstagefright_foundation.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libstagefright_foundation-v33.so \
+    prebuilts/vndk/v32/arm64/arch-arm64-armv8-a/shared/vndk-core/libcrypto.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libcrypto-v32.so \
+    prebuilts/vndk/v32/arm64/arch-arm64-armv8-a/shared/vndk-core/libssl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libssl-v32.so
 
 # WiFi
 PRODUCT_PACKAGES += \
-    android.hardware.tetheroffload.config@1.0.vendor:64 \
-    android.hardware.tetheroffload.control@1.0.vendor:64 \
-    android.hardware.tetheroffload.control@1.1.vendor:64 \
+    android.hardware.tetheroffload.config@1.0.vendor \
+    android.hardware.tetheroffload.control@1.0.vendor \
+    android.hardware.tetheroffload.control@1.1.vendor \
     android.system.keystore2-V1-ndk.vendor \
-    android.hardware.wifi@1.0.vendor:64 \
-    android.hardware.wifi@1.1.vendor:64\
-    android.hardware.wifi@1.2.vendor:64 \
-    android.hardware.wifi@1.3.vendor:64 \
-    android.hardware.wifi@1.4.vendor:64 \
-    android.hardware.wifi@1.5.vendor:64 \
+    android.hardware.wifi@1.0.vendor \
+    android.hardware.wifi@1.1.vendor \
+    android.hardware.wifi@1.2.vendor \
+    android.hardware.wifi@1.3.vendor \
+    android.hardware.wifi@1.4.vendor \
+    android.hardware.wifi@1.5.vendor \
     wpa_supplicant \
     hostapd \
     hostapd_cli \
+    libwifi-hal-mt66xx \
     libwifi-system-iface.vendor
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/hidl/vendor_hals.xml:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/vendor_hals/vendor_hals.xml
 
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
@@ -515,8 +592,10 @@ PRODUCT_PACKAGES += \
     libsensors_shim
 
 PRODUCT_PACKAGES += \
-    libshim_ui \
-    libshim
+    libshim_ui
+
+# Shim for missing symbols
+PRODUCT_PACKAGES += libshim
 
 # Inherit from vendor blobs
-$(call inherit-product, vendor/oneplus/mt6877-common/mt6877-common-vendor.mk)
+$(call inherit-product, vendor/oplus/mt6877-common/mt6877-common-vendor.mk)
