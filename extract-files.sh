@@ -19,7 +19,7 @@
 set -e
 
 export DEVICE=mt6877-common
-export VENDOR=oplus
+export VENDOR=oneplus
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
