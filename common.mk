@@ -106,6 +106,10 @@ DONT_DEXPREOPT_PREBUILTS := true
 SYSTEM_OPTIMIZE_JAVA := true
 SYSTEMUI_OPTIMIZE_JAVA := true
 
+# Device-specific background service
+PRODUCT_PACKAGES += \
+    OssiDeviceService
+
 # Doze
 PRODUCT_PACKAGES += \
     OplusDoze
