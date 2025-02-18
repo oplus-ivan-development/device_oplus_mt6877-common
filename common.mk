@@ -16,6 +16,9 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 # Always use scudo for memory allocator
 PRODUCT_USE_SCUDO := true
 
+# Vendor Log Tag
+include $(COMMON_PATH)/configs/props/logtag.mk
+
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio.service \
@@ -450,9 +453,6 @@ PRODUCT_PACKAGES += \
 # Touch
 PRODUCT_PACKAGES += \
     vendor.lineage.touch@1.0-service.oplus
-
-# Properties
-include $(LOCAL_PATH)/vendor_logtag.mk
 
 # Vibrator
 PRODUCT_PACKAGES += \
