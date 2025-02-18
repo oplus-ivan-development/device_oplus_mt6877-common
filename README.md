@@ -1,6 +1,4 @@
-#
-# Copyright (C) 2024 The LineageOS Project.
-#
+# Copyright (C) 2025 The LineageOS Project.
 
 Device tree for the OnePlus Nord CE 2 5G (ivan)
 =================================================
