@@ -456,7 +456,7 @@ include $(LOCAL_PATH)/vendor_logtag.mk
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    android.hardware.vibrator-service.mediatek
+    android.hardware.vibrator-service.mt6877
 
 # VNDK
 PRODUCT_COPY_FILES += \
