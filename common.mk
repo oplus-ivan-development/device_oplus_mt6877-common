@@ -386,6 +386,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
+# ImsInit hack
+PRODUCT_PACKAGES += \
+    ImsInit
+
 # Rootdir
 PRODUCT_PACKAGES += \
     fstab.mt6877.ramdisk \
