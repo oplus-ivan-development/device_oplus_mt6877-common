@@ -510,7 +510,7 @@ PRODUCT_BOOT_JARS += \
 
 # Thermal
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.mtk \
+    android.hardware.thermal-service.mediatek \
     android.hardware.thermal@2.0.vendor \
     android.hardware.thermal@1.0-impl
 
@@ -520,7 +520,7 @@ PRODUCT_PACKAGES += \
 
 # USB
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.3-service-mediatekv2
+    android.hardware.usb-service.mediatek
 
 # Vibrator
 PRODUCT_PACKAGES += \
