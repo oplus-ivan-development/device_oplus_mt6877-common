@@ -488,5 +488,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf
 
+# Shim for missing symbols
+PRODUCT_PACKAGES += libshim
+
 # Inherit the proprietary files
 $(call inherit-product, vendor/oplus/ivan/ivan-vendor.mk)
