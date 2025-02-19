@@ -10,6 +10,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
+#Inherit the proprietary files
+$(call inherit-product, packages/apps/prebuilt-apps/prebuilt-apps.mk)
+
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 30
 
@@ -471,6 +474,12 @@ PRODUCT_COPY_FILES += \
     prebuilts/vndk/v32/arm64/arch-arm64-armv8-a/shared/vndk-core/libcrypto.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libcrypto-v32.so \
     prebuilts/vndk/v32/arm64/arch-arm64-armv8-a/shared/vndk-core/libssl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libssl-v32.so
 
+# Viper4Android
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/prebuilt/viper/lib/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/prebuilt/viper/lib64/soundfx/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/prebuilt/viper/etc/audio_effects.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_effects.conf
+    
 # Wi-Fi
 PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.config@1.0.vendor \
