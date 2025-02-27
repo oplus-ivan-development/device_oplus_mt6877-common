@@ -1,20 +1,18 @@
 # MTK platform .rc configure
 import /vendor/etc/init/hw/init.connectivity.rc
+import /vendor/etc/init/hw/init.mt6877.power.rc
 import /vendor/etc/init/hw/init.mt6877.usb.rc
 import /vendor/etc/init/hw/init.project.rc
-import /system_ext/etc/init/hw/init.aee.rc
 import /FWUpgradeInit.rc
-import /vendor/etc/init/hw/init.aee.rc
-import /vendor/etc/init/hw/init.volte.rc
-import /vendor/etc/init/hw/init.mal.rc
 import /vendor/etc/init/hw/init.sensor_2_0.rc
-import /vendor/etc/init/hw/init.mt6877.power.rc
+import /vendor/etc/init/hw/init.modem.rc
 
-# init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
-import ${ro.vendor.rc}init.modem.rc
-# *** DO NOT import the new rc file after this line ***
 
 on early-init
+    write /proc/bootprof "INIT:early-init"
+    # boot perf. tune
+    write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "0 0 0 0"
+    write /sys/devices/platform/boot_dramboost/dramboost/dramboost 1
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
 
@@ -24,7 +22,11 @@ on property:sys.oplus.bootupgrade=1
 
 on init
     write /proc/bootprof "INIT:init"
-    symlink /sdcard /mnt/sdcard 
+    # Support legacy paths
+    symlink /sdcard /mnt/sdcard
+
+    # if primary storage is physical, set ro.vold.primary_physical to 1
+    # setprop ro.vold.primary_physical 1
 
     mkdir /mnt/cd-rom 0000 system system
 
@@ -36,11 +38,18 @@ on init
     write /proc/sys/net/core/wmem_max 8388608
     write /proc/sys/net/core/rmem_max 8388608
 
-#add for MIDAS
+# update cpus for cpuset cgroup
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-7
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-5
+    write /dev/cpuset/top-app/cpus 0-7
+
+#fangxiang@BSP.Power.Framework, 2020/12/17, add for MIDAS
     chown system system /dev/midas_dev
     chmod 0660 /dev/midas_dev
 
-#add for MIDAS binder_stats
+#BSP.Power.Framework, 2020/12/17, add for MIDAS binder_stats
     chown system system /dev/binder_stats
     chmod 0660 /dev/binder_stats
 
@@ -56,6 +65,10 @@ on late-init
 # mount different fs start
 
 on charger
+    #Set CPU/Dram init parameter
+    write /proc/perfmgr/boost_ctrl/cpu_ctrl/boot_freq "-1 -1 -1 -1"
+    write /sys/devices/platform/boot_dramboost/dramboost/dramboost 0
+
     exec /system/bin/e2fsck -f -p /dev/block/by-name/cache
     mount ext4 /dev/block/by-name/cache /cache rw wait
     chmod 0660 /dev/spm
@@ -132,10 +145,17 @@ on fs
 #ifdef OPLUS_FEATURE_ZRAM_OPT
     chmod +x /vendor/bin/swap_enable.sh
     start swap_enable_init
+#else
+    # swapon_all /vendor/etc/fstab.enableswap
 #endif
 
 on fs
+    #ifndef OPLUS_FEATURE_CHG_BASIC
+    # Hailong.Shen@BSP.CHG.Basic, 2021/03/16, Modify DRIVER.ISO instead of iAmCdRom.iso
+    #mount iso9660 loop@/vendor/etc/iAmCdRom.iso /mnt/cd-rom ro
+    #else  /* OPLUS_FEATURE_CHG_BASIC */
     mount iso9660 loop@/vendor/etc/DRIVER.ISO /mnt/cd-rom ro
+    #endif /* !OPLUS_FEATURE_CHG_BASIC */
 
 on late-fs
     write /proc/bootprof "INIT:late-fs"
@@ -206,8 +226,6 @@ on post-fs
 
     # allow ccci_mdinit access ccci_dump
     chown root system /proc/ccci_dump
-     on property:sys.boot_completed=1
-	write /sys/devices/virtual/oplus_chg/usb/otg_switch 1
 
 on post-fs-data
     write /proc/bootprof "INIT:post-fs-data"
@@ -234,6 +252,7 @@ on post-fs-data
     chown system system /mnt/vendor/nvcfg/fg/car_tune_value
 
     # create basic filesystem structure
+    # We chown/chmod /mnt/vendor/nvdata again so because mount is run as root + defaults
     chown root system /mnt/vendor/nvdata
     chmod 0771 /mnt/vendor/nvdata
     mkdir /mnt/vendor/nvdata/media 0771 media audio
@@ -257,6 +276,7 @@ on post-fs-data
     mkdir /data/vendor/AFObitTrue
     chown root system /data/vendor/AFObitTrue
     chmod 0771 /data/vendor/AFObitTrue
+
 
     #Create shading mount point
     mkdir /data/vendor/shading
@@ -283,16 +303,13 @@ on post-fs-data
     chown root system /data/vendor/flicker
     chmod 0771 /data/vendor/flicker
 
-    # Create Audio HAL data directory
-    mkdir /data/vendor/audiohal 0771 system audio
-
     # Set SELinux security contexts on upgrade or policy update.
     restorecon_recursive /mnt/vendor/nvdata
 
     #give system access to rfkill device node
     chmod 0660 /dev/rfkill
 
-    # create for muxd pts device node
+    # create for muxd pts device node , to operate without root
     mkdir /dev/radio 0770 radio radio
 
     chmod 0660 /dev/spm
@@ -336,7 +353,11 @@ on post-fs-data
     chmod 444 /etc/radvd/radvd.conf
 
     # Mali 3D GPU driver
+    #insmod /vendor/lib/modules/mali.ko
     chmod 666 /dev/mali0
+    #chown system graphics /dev/mali
+
+
 
     # Touch Panel
     # chmod 0664 /dev/touch
@@ -363,13 +384,16 @@ on post-fs-data
     chown root system /dev/alarm
 
     # M4U
+    #insmod /vendor/lib/modules/m4u.ko
+    #mknod /dev/M4U_device c 188 0
     chmod 0444 /dev/m4u
+    #chown system media /dev/M4U_device
     chmod 0640 /proc/m4u
     chown system media /proc/m4u
     chmod 0640 /proc/mtk_iommu
     chown system media /proc/mtk_iommu
 
-    #set mlock limit
+    #set mlock limit to infinate (for m4u operation)
     setrlimit 8 -1 -1
 
     # CMDQ
@@ -413,6 +437,7 @@ on post-fs-data
     mkdir /data/vendor/vcodec/out 0770 media system
 
     #MJC
+    #insmod /vendor/lib/modules/mjc_kernel_driver.ko
     chmod 0660 /dev/MJC
     chown media system /dev/MJC
 
@@ -437,6 +462,8 @@ on post-fs-data
     chown system /sys/devices/platform/gsensor/driver/cpsrange
 
     #ifdef OPLUS_FEATURE_SEPOLITY
+    # chenjun@MultiMedia.Display.LCD 2021/08/23,
+    # add for cabc and silence node
     chown system system /sys/kernel/oplus_display/LCM_CABC
     chown system system /sys/kernel/oplus_display/sau_closebl_node
     chown system system /sys/kernel/oplus_display/hbm
@@ -469,6 +496,7 @@ on post-fs-data
     chmod 0666 /sys/kernel/oplus_display/dimlayer_bl_en
     chown system system /sys/kernel/oplus_display/dim_dc_alpha
     chmod 0666 /sys/kernel/oplus_display/dim_dc_alpha
+    # Add for osc hopping
     chown system system /sys/kernel/oplus_display/osc
     chmod 0666 /sys/kernel/oplus_display/osc
     chown system system /sys/kernel/oplus_display/mipi_hopping
@@ -543,10 +571,6 @@ on post-fs-data
     chown root diag /vendor/bin/baseband_regdump
     chmod 4750 /vendor/bin/baseband_regdump
 
-     # Boot mode
-    chmod 0664 /sys/class/BOOT/BOOT/boot/boot_mode
-    chown system system /sys/class/BOOT/BOOT/boot/boot_mode
-
     #pmu
     chown root radio /sys/devices/platform/mt-pmic/pmic_access_bank0
     chown root radio /sys/devices/platform/mt-pmic/pmic_access_bank1
@@ -578,6 +602,8 @@ on post-fs-data
     chmod 0660 /dev/fm
     chown media media /dev/fm
 
+    # device apc settings
+
     # device info /proc interface
     chmod 0440 /dev/devmap
     chown root system /dev/devmap
@@ -585,6 +611,7 @@ on post-fs-data
     # bluetooth
     chown bluetooth bluetooth /dev/hid-keyboard
     chmod 0660 /dev/hid-keyboard
+    #Use uinput's default permission
     chown system net_bt_admin /dev/uinput
 
     # UIBC
@@ -597,6 +624,7 @@ on post-fs-data
     #HDMI
     chown media system /dev/hdmitx
     chmod 0664 /dev/hdmitx
+
 
     # JPEG
     chmod 0666 /proc/mtk_jpeg
@@ -700,6 +728,7 @@ on post-fs-data
 
 
    #change partition permission
+
     chmod 0640 /mtd@sec_ro
     chown root system /mtd@sec_ro
 
@@ -932,6 +961,7 @@ on boot
     chmod 0660 /sys/power/dcm_state
 
 ##Netlog tool
+   #change permissions about terminal
     chown root radio /proc/net/vlan/config
     chmod 0640 /proc/net/vlan/config
     chown root radio /proc/net/ip6_tables_matches
@@ -1018,6 +1048,40 @@ on property:sys.boot_completed=1
     # stop bootprof
     write /proc/bootprof 0
 
+#service dpfd /vendor/bin/dpfd
+#	user root
+#	group system media
+
+#
+#  External Modme control related services
+#
+
+#
+#  Modem related services (Begin)
+#
+##Add by T.Zh for ppp daemon
+#service pppd /system/bin/pppd file /data/misc/ppp/ppp_options
+#    user root
+#    disabled
+#    oneshot
+#
+##
+#
+#  Modem related services (End)
+#
+
+#add for power-off alarm
+#service poad /vendor/bin/poad
+#    class main
+#    user system
+#    group system
+#    oneshot
+
+#service BGW /vendor/xbin/BGW
+#	user system
+#	group gps system radio
+#	class main
+
 # Battery info
 on property:persist.vendor.mediatek.fg.disable=1
     write /sys/devices/platform/battery_meter/FG_daemon_disable 1
@@ -1077,10 +1141,12 @@ service osi /system/bin/osi
     oneshot
     #seclabel u:r:osi:s0
 
+#linqun@Android.Performance, 2021/09/19, change printk to 6 6 1 7 on user build type,
 on property:ro.build.type=user
     write /proc/sys/kernel/printk  "6 6 1 7"
 
 #ifdef OPLUS_FEATURE_CHG_BASIC
+#/* LiYue@CHG.BSP.BASIC, 2021/09/22, move from fuelgauged_init.rc and fuelgauged_nvram_init.rc */
 service fuelgauged /vendor/bin/fuelgauged
     class core
     user system
