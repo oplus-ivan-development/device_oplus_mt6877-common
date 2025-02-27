@@ -63,7 +63,7 @@ struct als_config {
     float bias;
     float max_brightness;
 };
-//Add mt6877 data
+//Add mt6893 data
 static als_config conf = {
     .hbr = true,
     .rgbw_max_lux = { 1210.0, 2074.0, 838.0, 3541.0 },
