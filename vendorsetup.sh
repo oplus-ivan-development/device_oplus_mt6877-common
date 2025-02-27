@@ -17,12 +17,3 @@ git clone -b lineage-21 https://github.com/LineageOS/android_device_mediatek_sep
 
 # clang
 git clone --depth=1 https://github.com/Notganesh/android_prebuilts_clang_host_linux.git prebuilts/clang/host/linux-x86/clang-r383902
-
-# wlan
-git clone https://github.com/mt6893-development/android_hardware_mediatek_wlan.git -b lineage-21 hardware/mediatek/wlan
-
-# prebuilt-apps
-git clone https://github.com/oplus-ivan-development/packages_apps_prebuilt-apps.git packages/apps/prebuilt-apps
-
-# Source patches
-bash device/oplus/mt6877-common/patches/apply.sh

@@ -24,9 +24,6 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 PRODUCT_SHIPPING_API_LEVEL := 30
 
-# Call proprietary blob setup
-$(call inherit-product, packages/apps/prebuilt-apps/prebuilt-apps.mk)
-
 # Vendor Log Tag
 include $(COMMON_PATH)/configs/props/logtag.mk
 
@@ -567,7 +564,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     hostapd \
     hostapd_cli \
-    libwifi-hal-mt66xx \
     libwifi-system-iface.vendor
 
 PRODUCT_COPY_FILES += \
