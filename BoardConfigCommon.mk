@@ -212,4 +212,4 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 
 # inherit from the proprietary version
-#include vendor/oplus/mt6877-common/BoardConfigVendor.mk
+include vendor/oneplus/mt6877-common/BoardConfigVendor.mk
