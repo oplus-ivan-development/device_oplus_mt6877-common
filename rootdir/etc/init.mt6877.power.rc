@@ -66,6 +66,8 @@ on property:sys.boot_completed=1
     write /dev/stune/top-app/schedtune.window_policy 2
     write /dev/stune/rt/schedtune.window_policy 2
     write /dev/stune/camera-daemon/schedtune.window_policy 2
+    write /dev/stune/nnapi-hal/schedtune.window_policy 2
+    write /dev/stune/io/schedtune.window_policy 2
     write /dev/stune/background/schedtune.window_policy 3
     write /dev/stune/background/schedtune.discount_wait_time 1
 

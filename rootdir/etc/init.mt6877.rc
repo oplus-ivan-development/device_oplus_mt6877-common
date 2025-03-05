@@ -1,4 +1,5 @@
 # MTK platform .rc configure
+
 import /vendor/etc/init/hw/init.connectivity.rc
 import /vendor/etc/init/hw/init.mt6877.power.rc
 import /vendor/etc/init/hw/init.mt6877.usb.rc
@@ -6,7 +7,6 @@ import /vendor/etc/init/hw/init.project.rc
 import /FWUpgradeInit.rc
 import /vendor/etc/init/hw/init.sensor_2_0.rc
 import /vendor/etc/init/hw/init.modem.rc
-
 
 on early-init
     write /proc/bootprof "INIT:early-init"
@@ -41,7 +41,7 @@ on init
 # update cpus for cpuset cgroup
     write /dev/cpuset/foreground/cpus 0-7
     write /dev/cpuset/foreground/boost/cpus 0-7
-    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/background/cpus 0-5
     write /dev/cpuset/system-background/cpus 0-5
     write /dev/cpuset/top-app/cpus 0-7
 
@@ -1141,9 +1141,9 @@ service osi /system/bin/osi
     oneshot
     #seclabel u:r:osi:s0
 
-#linqun@Android.Performance, 2021/09/19, change printk to 6 6 1 7 on user build type,
+#linqun@Android.Performance, 2021/09/19, change printk to 1 4 1 7 on user build type,
 on property:ro.build.type=user
-    write /proc/sys/kernel/printk  "6 6 1 7"
+    write /proc/sys/kernel/printk  "1 4 1 7"
 
 #ifdef OPLUS_FEATURE_CHG_BASIC
 #/* LiYue@CHG.BSP.BASIC, 2021/09/22, move from fuelgauged_init.rc and fuelgauged_nvram_init.rc */
